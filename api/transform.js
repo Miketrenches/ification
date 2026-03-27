@@ -2,6 +2,8 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
 
   const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+  console.log('Key last 4 chars:', GEMINI_API_KEY?.slice(-4));
+  console.log('Key length:', GEMINI_API_KEY?.length);
   const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent?key=${GEMINI_API_KEY}`;
 
   try {
@@ -17,24 +19,15 @@ export default async function handler(req, res) {
     const data = await response.json();
     const parts = data?.candidates?.[0]?.content?.parts || [];
 
-    // Find image part and return it directly
     for (const part of parts) {
       const id = part.inlineData || part.inline_data;
       if (id) {
         const mime = id.mimeType || id.mime_type || '';
         if (mime.startsWith('image/')) {
-          // Return just the image as base64
           return res.status(200).json({ imageData: id.data, mimeType: mime });
         }
       }
     }
 
-    // No image found
     console.log('No image in parts:', JSON.stringify(parts).slice(0, 300));
-    return res.status(200).json({ error: 'No image returned by Gemini' });
-
-  } catch (err) {
-    console.error('Proxy error:', err);
-    res.status(500).json({ error: err.message });
-  }
-}
+    return res.status(200).js
