@@ -76,6 +76,27 @@
   @keyframes spin{to{transform:rotate(360deg)}}
   @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 
+  /* TOP NAV */
+  .top-nav {
+    position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
+    display: flex; align-items: center; gap: 0;
+    background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12);
+    border-radius: 100px; padding: 6px 8px; z-index: 10;
+    backdrop-filter: blur(12px);
+  }
+  .top-nav-btn {
+    display: flex; align-items: center; gap: 6px;
+    font-family: 'Fredoka One', cursive; font-size: .8rem;
+    color: rgba(255,255,255,.7); text-decoration: none;
+    padding: 6px 14px; border-radius: 100px;
+    transition: all .2s; white-space: nowrap;
+  }
+  .top-nav-btn:hover { background: rgba(255,255,255,.1); color: white; }
+  .x-btn:hover { color: white; }
+  .ca-btn:hover { color: var(--gold); }
+  .dex-btn:hover { color: var(--green); }
+  .top-nav-divider { width: 1px; height: 16px; background: rgba(255,255,255,.15); margin: 0 2px; }
+
   /* PAGE 2 */
   #page2 { background:var(--dark); padding:40px 24px 60px; align-items:center; }
   .page2-header { text-align:center; margin-bottom:36px; }
@@ -154,6 +175,23 @@
   <div class="stars" id="stars"></div>
   <div class="blob blob1"></div><div class="blob blob2"></div><div class="blob blob3"></div>
   <div class="corner-deco tl">⬡</div><div class="corner-deco br">◈</div>
+
+  <!-- TOP NAV -->
+  <div class="top-nav">
+    <a href="#" class="top-nav-btn x-btn">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.911-5.622Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      Community
+    </a>
+    <div class="top-nav-divider"></div>
+    <a href="#" class="top-nav-btn ca-btn">
+      <span>📋</span> CA: TBA
+    </a>
+    <div class="top-nav-divider"></div>
+    <a href="#" class="top-nav-btn dex-btn">
+      <span>📈</span> Dexscreener
+    </a>
+  </div>
+
   <div class="logo-area">
     <p class="logo-eyebrow">Welcome to</p>
     <h1 class="logo-main">IFIC<span class="ify">ATION</span></h1>
