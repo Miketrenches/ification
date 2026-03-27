@@ -375,9 +375,11 @@
       let imgB64 = null, imgMime = 'image/png';
 
       for (const part of parts) {
-        if (part.inline_data?.mime_type?.startsWith('image/')) {
-          imgB64  = part.inline_data.data;
-          imgMime = part.inline_data.mime_type;
+    const inlineData = part.inlineData || part.inline_data;
+    if (inlineData?.mimeType?.startsWith('image/') || inlineData?.mime_type?.startsWith('image/')) {
+    imgB64  = inlineData.data;
+    imgMime = inlineData.mimeType || inlineData.mime_type;
+
           break;
         }
       }
