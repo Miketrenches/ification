@@ -372,15 +372,11 @@
         throw new Error(e?.error?.message || `Gemini API error ${res.status}`);
       }
 
-const data = await res.json();
-if (data.error) throw new Error(data.error);
-const imgB64 = data.imageData;
-const imgMime = data.mimeType || 'image/png';
-
-      if (!imgB64) {
-        const textPart = parts.find(p => p.text && p.text.trim().length > 2);
-        throw new Error(textPart?.text || 'Gemini returned no image. Try a different style or a clearer photo.');
-      }
+      const data = await res.json();
+      if (data.error) throw new Error(data.error);
+      const imgB64 = data.imageData;
+      const imgMime = data.mimeType || 'image/png';
+      if (!imgB64) throw new Error('Gemini returned no image. Try a different style or a clearer photo.');
 
       resultDataURL = `data:${imgMime};base64,${imgB64}`;
       document.getElementById('resultPreview').src = resultDataURL;
