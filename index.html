@@ -237,7 +237,9 @@
   }
 
   // Config
-  const GEMINI_URL = '/api/transform';
+  const GEMINI_API_KEY = 'AIzaSyD6mBGZIAg_gz5Sb3c7pdJ1RU_D-qEuX2M';
+  const GEMINI_MODEL   = 'gemini-2.5-flash-preview-05-20';
+  const GEMINI_URL     = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
 
   let currentPage = 1, selectedStyle = null, uploadedDataURL = null, resultDataURL = null;
 
@@ -374,21 +376,20 @@
       const parts = data?.candidates?.[0]?.content?.parts || [];
       let imgB64 = null, imgMime = 'image/png';
 
-for (const part of parts) {
-  const inlineData = part.inlineData || part.inline_data;
-  if (inlineData) {
-    const mime = inlineData.mimeType || inlineData.mime_type || '';
-    if (mime.startsWith('image/')) {
-      imgB64  = inlineData.data;
-      imgMime = mime;
-      break;
-    }
-  }
-}
-console.log('imgB64 found:', !!imgB64, 'parts count:', parts.length);
-if (!imgB64) {
-        // Check if there's a text error message
-        const textPart = parts.find(p => p.text);
+      for (const part of parts) {
+        const id = part.inlineData || part.inline_data;
+        if (id) {
+          const m = id.mimeType || id.mime_type || '';
+          if (m.startsWith('image/')) {
+            imgB64  = id.data;
+            imgMime = m;
+            break;
+          }
+        }
+      }
+
+      if (!imgB64) {
+        const textPart = parts.find(p => p.text && p.text.trim().length > 2);
         throw new Error(textPart?.text || 'Gemini returned no image. Try a different style or a clearer photo.');
       }
 
