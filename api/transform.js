@@ -6,13 +6,7 @@ export default async function handler(req, res) {
 
   try {
     const body = req.body;
-
-    // Add responseModalities if missing
-    if (body.generationConfig) {
-      body.generationConfig.responseModalities = ['TEXT', 'IMAGE'];
-    } else {
-      body.generationConfig = { responseModalities: ['TEXT', 'IMAGE'] };
-    }
+    body.generationConfig = { responseModalities: ['TEXT', 'IMAGE'], temperature: 1 };
 
     const response = await fetch(GEMINI_URL, {
       method: 'POST',
@@ -21,11 +15,24 @@ export default async function handler(req, res) {
     });
 
     const data = await response.json();
+    const parts = data?.candidates?.[0]?.content?.parts || [];
 
-    // Log what came back so we can debug
-    console.log('Gemini response:', JSON.stringify(data).slice(0, 500));
+    // Find image part and return it directly
+    for (const part of parts) {
+      const id = part.inlineData || part.inline_data;
+      if (id) {
+        const mime = id.mimeType || id.mime_type || '';
+        if (mime.startsWith('image/')) {
+          // Return just the image as base64
+          return res.status(200).json({ imageData: id.data, mimeType: mime });
+        }
+      }
+    }
 
-    res.status(response.status).json(data);
+    // No image found
+    console.log('No image in parts:', JSON.stringify(parts).slice(0, 300));
+    return res.status(200).json({ error: 'No image returned by Gemini' });
+
   } catch (err) {
     console.error('Proxy error:', err);
     res.status(500).json({ error: err.message });
