@@ -374,17 +374,19 @@
       const parts = data?.candidates?.[0]?.content?.parts || [];
       let imgB64 = null, imgMime = 'image/png';
 
-      for (const part of parts) {
-    const inlineData = part.inlineData || part.inline_data;
-    if (inlineData?.mimeType?.startsWith('image/') || inlineData?.mime_type?.startsWith('image/')) {
-    imgB64  = inlineData.data;
-    imgMime = inlineData.mimeType || inlineData.mime_type;
-
-          break;
-        }
-      }
-
-      if (!imgB64) {
+for (const part of parts) {
+  const inlineData = part.inlineData || part.inline_data;
+  if (inlineData) {
+    const mime = inlineData.mimeType || inlineData.mime_type || '';
+    if (mime.startsWith('image/')) {
+      imgB64  = inlineData.data;
+      imgMime = mime;
+      break;
+    }
+  }
+}
+console.log('imgB64 found:', !!imgB64, 'parts count:', parts.length);
+if (!imgB64) {
         // Check if there's a text error message
         const textPart = parts.find(p => p.text);
         throw new Error(textPart?.text || 'Gemini returned no image. Try a different style or a clearer photo.');
