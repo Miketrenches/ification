@@ -76,13 +76,35 @@
   @keyframes spin{to{transform:rotate(360deg)}}
   @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 
+  /* TOP NAV */
+  .top-nav {
+    position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
+    display: flex; align-items: center; gap: 0;
+    background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12);
+    border-radius: 100px; padding: 6px 8px; z-index: 10;
+    backdrop-filter: blur(12px);
+  }
+  .top-nav-btn {
+    display: flex; align-items: center; gap: 6px;
+    font-family: 'Fredoka One', cursive; font-size: .8rem;
+    color: rgba(255,255,255,.7); text-decoration: none;
+    padding: 6px 14px; border-radius: 100px;
+    transition: all .2s; white-space: nowrap;
+  }
+  .top-nav-btn:hover { background: rgba(255,255,255,.1); color: white; }
+  .x-btn:hover { color: white; }
+  .ca-btn:hover { color: var(--gold); }
+  .dex-btn:hover { color: var(--green); }
+  .top-nav-divider { width: 1px; height: 16px; background: rgba(255,255,255,.15); margin: 0 2px; }
+
   /* PAGE 2 */
   #page2 { background:var(--dark); padding:40px 24px 60px; align-items:center; }
   .page2-header { text-align:center; margin-bottom:36px; }
   .page2-header h2 { font-family:'Bangers',cursive; font-size:clamp(2.5rem,8vw,4.5rem); color:white; letter-spacing:.05em; line-height:1; }
   .page2-header h2 span { color:var(--gold); }
   .page2-header p { color:rgba(255,255,255,.4); font-size:.9rem; margin-top:8px; font-family:'Fredoka One',cursive; letter-spacing:.1em; }
-  .style-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:18px; max-width:860px; width:100%; margin-bottom:40px; }
+  .style-grid { display:flex; flex-wrap:wrap; justify-content:center; gap:18px; max-width:860px; width:100%; margin-bottom:40px; }
+  .style-card { width:190px; flex-shrink:0; }
   .style-card { background:rgba(255,255,255,.04); border:2px solid rgba(255,255,255,.08); border-radius:24px; padding:28px 20px 22px; text-align:center; cursor:pointer; transition:all .25s cubic-bezier(.34,1.56,.64,1); position:relative; overflow:hidden; }
   .style-card::after { content:''; position:absolute; inset:0; border-radius:22px; background:linear-gradient(135deg,var(--ca),var(--cb)); opacity:0; transition:opacity .3s; }
   .style-card:hover { transform:translateY(-8px) scale(1.03); border-color:transparent; box-shadow:0 20px 50px rgba(0,0,0,.4); }
@@ -95,7 +117,7 @@
   .style-card .desc { font-size:.75rem; color:rgba(255,255,255,.45); margin-top:6px; line-height:1.4; position:relative; z-index:1; }
   .style-card .check { position:absolute; top:12px; right:14px; width:24px; height:24px; border-radius:50%; background:var(--gold); display:flex; align-items:center; justify-content:center; font-size:12px; opacity:0; transition:opacity .2s; z-index:2; }
   .style-card.selected .check { opacity:1; }
-  .card-pixel{--ca:#7B2FBE;--cb:#1B8EFF} .card-ghibli{--ca:#39D353;--cb:#00C9B1} .card-baby{--ca:#FF3D9A;--cb:#FF6B00} .card-chibi{--ca:#FF6B00;--cb:#FFD700} .card-vaporwave{--ca:#FF3D9A;--cb:#7B2FBE} .card-anime{--ca:#1B8EFF;--cb:#FF3D9A} .card-clay{--ca:#39D353;--cb:#1B8EFF} .card-comic{--ca:#FF6B00;--cb:#FF3D9A}
+  .card-pixel{--ca:#7B2FBE;--cb:#1B8EFF} .card-ghibli{--ca:#39D353;--cb:#00C9B1} .card-baby{--ca:#FF3D9A;--cb:#FF6B00} .card-chibi{--ca:#FF6B00;--cb:#FFD700} .card-anime{--ca:#1B8EFF;--cb:#FF3D9A} .card-dumb{--ca:#FFD700;--cb:#FF6B00} .card-comic{--ca:#FF6B00;--cb:#FF3D9A}
   .next-btn { font-family:'Bangers',cursive; font-size:1.4rem; letter-spacing:.1em; color:var(--dark); background:linear-gradient(135deg,var(--gold),var(--orange)); border:none; border-radius:100px; padding:14px 48px; cursor:pointer; box-shadow:0 6px 0 var(--deep-orange),0 14px 30px rgba(255,107,0,.35); transition:all .15s; }
   .next-btn:hover{transform:translateY(-3px)} .next-btn:active{transform:translateY(3px);box-shadow:0 2px 0 var(--deep-orange)} .next-btn:disabled{opacity:.35;cursor:not-allowed;transform:none;box-shadow:0 6px 0 var(--deep-orange)}
 
@@ -113,9 +135,9 @@
   .upload-zone .upload-icon { font-size:3.5rem; margin-bottom:12px; }
   .upload-zone p { font-family:'Fredoka One',cursive; color:rgba(255,255,255,.5); font-size:1rem; }
   .upload-zone p strong { color:var(--gold); }
-  .preview-area { width:100%; max-width:480px; display:none; flex-direction:column; gap:16px; align-items:center; }
+  .preview-area { width:100%; max-width:720px; display:none; flex-direction:column; gap:16px; align-items:center; }
   .preview-area.visible { display:flex; }
-  .img-panels { display:grid; grid-template-columns:1fr 1fr; gap:14px; width:100%; }
+  .img-panels { display:grid; grid-template-columns:1fr 1fr; gap:16px; width:100%; }
   .img-panel { border-radius:20px; overflow:hidden; position:relative; aspect-ratio:1; background:rgba(255,255,255,.05); border:2px solid rgba(255,255,255,.08); }
   .img-panel img { width:100%; height:100%; object-fit:cover; display:block; }
   .img-panel .label { position:absolute; bottom:10px; left:50%; transform:translateX(-50%); font-family:'Fredoka One',cursive; font-size:.7rem; background:rgba(0,0,0,.65); color:white; padding:4px 12px; border-radius:100px; white-space:nowrap; letter-spacing:.05em; backdrop-filter:blur(4px); }
@@ -129,11 +151,11 @@
   @keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
   .result-placeholder { display:flex; align-items:center; justify-content:center; height:100%; flex-direction:column; gap:8px; }
   .result-placeholder span:first-child{font-size:2.5rem} .result-placeholder span:last-child{font-family:'Fredoka One',cursive;color:rgba(255,255,255,.25);font-size:.75rem}
-  .transform-btn { width:100%; max-width:480px; font-family:'Bangers',cursive; font-size:1.5rem; letter-spacing:.1em; color:var(--dark); background:linear-gradient(135deg,var(--gold),var(--orange)); border:none; border-radius:100px; padding:16px; cursor:pointer; box-shadow:0 6px 0 var(--deep-orange),0 14px 30px rgba(255,107,0,.35); transition:all .15s; }
+  .transform-btn { width:100%; max-width:720px; font-family:'Bangers',cursive; font-size:1.5rem; letter-spacing:.1em; color:var(--dark); background:linear-gradient(135deg,var(--gold),var(--orange)); border:none; border-radius:100px; padding:16px; cursor:pointer; box-shadow:0 6px 0 var(--deep-orange),0 14px 30px rgba(255,107,0,.35); transition:all .15s; }
   .transform-btn:hover{transform:translateY(-3px);box-shadow:0 10px 0 var(--deep-orange),0 20px 40px rgba(255,107,0,.4)} .transform-btn:active{transform:translateY(3px);box-shadow:0 2px 0 var(--deep-orange)} .transform-btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
-  .error-msg { font-family:'Fredoka One',cursive; color:#FF3D9A; font-size:.82rem; text-align:center; display:none; max-width:480px; line-height:1.6; padding:14px 20px; background:rgba(255,61,154,.07); border:1px solid rgba(255,61,154,.2); border-radius:16px; }
+  .error-msg { font-family:'Fredoka One',cursive; color:#FF3D9A; font-size:.82rem; text-align:center; display:none; max-width:720px; line-height:1.6; padding:14px 20px; background:rgba(255,61,154,.07); border:1px solid rgba(255,61,154,.2); border-radius:16px; }
   .error-msg.visible{display:block}
-  .download-btn { width:100%; max-width:480px; font-family:'Bangers',cursive; font-size:1.3rem; letter-spacing:.08em; color:white; background:rgba(255,255,255,.07); border:2px solid rgba(255,255,255,.15); border-radius:100px; padding:14px; cursor:pointer; transition:all .2s; display:none; }
+  .download-btn { width:100%; max-width:720px; font-family:'Bangers',cursive; font-size:1.3rem; letter-spacing:.08em; color:white; background:rgba(255,255,255,.07); border:2px solid rgba(255,255,255,.15); border-radius:100px; padding:14px; cursor:pointer; transition:all .2s; display:none; }
   .download-btn.visible{display:block} .download-btn:hover{background:rgba(255,255,255,.13);border-color:rgba(255,255,255,.3)}
   .back-nav{position:fixed;top:20px;left:20px;z-index:100;display:none} .back-nav.visible{display:block}
   .back-btn { font-family:'Fredoka One',cursive; font-size:.85rem; color:rgba(255,255,255,.5); background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1); border-radius:100px; padding:8px 16px; cursor:pointer; transition:all .2s; backdrop-filter:blur(8px); }
@@ -154,6 +176,23 @@
   <div class="stars" id="stars"></div>
   <div class="blob blob1"></div><div class="blob blob2"></div><div class="blob blob3"></div>
   <div class="corner-deco tl">⬡</div><div class="corner-deco br">◈</div>
+
+  <!-- TOP NAV -->
+  <div class="top-nav">
+    <a href="#" class="top-nav-btn x-btn">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.911-5.622Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      Community
+    </a>
+    <div class="top-nav-divider"></div>
+    <a href="#" class="top-nav-btn ca-btn">
+      <span>📋</span> CA: TBA
+    </a>
+    <div class="top-nav-divider"></div>
+    <a href="#" class="top-nav-btn dex-btn">
+      <span>📈</span> Dexscreener
+    </a>
+  </div>
+
   <div class="logo-area">
     <p class="logo-eyebrow">Welcome to</p>
     <h1 class="logo-main">IFIC<span class="ify">ATION</span></h1>
@@ -180,9 +219,8 @@
     <div class="style-card card-ghibli"    data-style="ghibli"    onclick="selectStyle(this)"><div class="check">✓</div><div class="icon">🌿</div><div class="name">GHIBLI<em>FY</em></div><div class="desc">Studio Ghibli painterly</div></div>
     <div class="style-card card-baby"      data-style="baby"      onclick="selectStyle(this)"><div class="check">✓</div><div class="icon">🍼</div><div class="name">BAB<em>IFY</em></div><div class="desc">Cute chubby baby style</div></div>
     <div class="style-card card-chibi"     data-style="chibi"     onclick="selectStyle(this)"><div class="check">✓</div><div class="icon">✨</div><div class="name">CHIB<em>IFY</em></div><div class="desc">Big-head anime chibi</div></div>
-    <div class="style-card card-vaporwave" data-style="vaporwave" onclick="selectStyle(this)"><div class="check">✓</div><div class="icon">🌊</div><div class="name">VAPOR<em>IFY</em></div><div class="desc">Vaporwave neon aesthetic</div></div>
     <div class="style-card card-anime"     data-style="anime"     onclick="selectStyle(this)"><div class="check">✓</div><div class="icon">⚡</div><div class="name">ANIM<em>IFY</em></div><div class="desc">Cel-shaded anime art</div></div>
-    <div class="style-card card-clay"      data-style="clay"      onclick="selectStyle(this)"><div class="check">✓</div><div class="icon">🏺</div><div class="name">CLAY<em>IFY</em></div><div class="desc">3D clay render style</div></div>
+    <div class="style-card card-dumb"      data-style="dumb"      onclick="selectStyle(this)"><div class="check">✓</div><div class="icon">🧠</div><div class="name">DUMB<em>IFY</em></div><div class="desc">Dumb it all the way down</div></div>
     <div class="style-card card-comic"     data-style="comic"     onclick="selectStyle(this)"><div class="check">✓</div><div class="icon">💥</div><div class="name">COMIC<em>IFY</em></div><div class="desc">Bold comic book halftones</div></div>
   </div>
   <button class="next-btn" id="nextBtn" onclick="goToPage(3)" disabled>CHOOSE IMAGE →</button>
@@ -220,7 +258,7 @@
         <div class="label" id="resultLabel" style="display:none">RESULT</div>
       </div>
     </div>
-    <button class="transform-btn" id="transformBtn" onclick="transformImage()">🪄 IFICATION TIME</button>
+    <button class="transform-btn" id="transformBtn" onclick="transformImage()">&#10024; IFICATION TIME</button>
     <p class="error-msg" id="errorMsg"></p>
     <button class="download-btn" id="downloadBtn" onclick="downloadResult()">⬇ Download Result</button>
   </div>
@@ -237,20 +275,18 @@
   }
 
   // Config
-  const GEMINI_MODEL   = 'gemini-2.5-flash-preview-05-20';
   const GEMINI_URL = '/api/transform';
-  
+
   let currentPage = 1, selectedStyle = null, uploadedDataURL = null, resultDataURL = null;
 
   const stylesMeta = {
-    pixel:     { icon:'🎮', label:'PIXELIFY',   loadTitle:'PIXELIFYING...',  loadSub:'Crunching into 8-bit',           prompt:'Transform this image into retro 8-bit pixel art. Use a strict limited colour palette, chunky visible square pixels, dithering, and the aesthetic of classic 80s/90s arcade video games. Keep the subject fully recognisable but completely pixelated.' },
-    ghibli:    { icon:'🌿', label:'GHIBLIFY',   loadTitle:'GHIBLIFYING...',  loadSub:'Summoning forest spirits',        prompt:'Repaint this image in Studio Ghibli animation style. Apply soft watercolour backgrounds, warm golden-hour lighting, slightly rounded character proportions, lush painterly natural details, and the dreamy atmospheric quality of Hayao Miyazaki films.' },
-    baby:      { icon:'🍼', label:'BABIFY',     loadTitle:'BABIFYING...',    loadSub:'Adding chubby cheeks',            prompt:'Transform this image into an adorable baby-fied version. Give everything chubby cheeks, oversized round heads, tiny pudgy bodies, huge innocent eyes, and rosy cheeks. Keep the subject recognisable but make it look extremely cute and baby-like.' },
-    chibi:     { icon:'✨', label:'CHIBIFY',    loadTitle:'CHIBIFYING...',   loadSub:'Enlarging the head ratio',        prompt:'Transform this image into chibi anime style. Use exaggerated proportions: very large head (3:1 ratio to tiny body), huge sparkling anime eyes, simplified cute features, bright saturated colours, and the over-the-top cute proportions of chibi character art.' },
-    vaporwave:  { icon:'🌊', label:'VAPORIFY',  loadTitle:'VAPORIFYING...',  loadSub:'Loading the synth grid',          prompt:'Transform this image into a vaporwave aesthetic artwork. Apply pink, purple and cyan colour grading, glowing neon outlines, retro 80s/90s synth vibes, dreamy surreal atmosphere, and the nostalgic cyberpunk visual style of vaporwave art.' },
-    anime:     { icon:'⚡', label:'ANIMIFY',    loadTitle:'ANIMIFYING...',   loadSub:'Drawing the outlines',            prompt:'Transform this image into sharp cel-shaded anime art. Use clean bold black outlines, flat colour fills with hard-edged shadows, dramatic lighting, expressive stylised eyes, and the visual style of modern action anime series.' },
-    clay:      { icon:'🏺', label:'CLAYIFY',    loadTitle:'CLAYIFYING...',   loadSub:'Sculpting in clay',               prompt:'Transform this image into a 3D clay render style. Make everything look sculpted from smooth colourful clay, with soft rounded shapes, subsurface light scattering, pastel colours, and a tactile handmade Claymation toy aesthetic.' },
-    comic:     { icon:'💥', label:'COMICIFY',   loadTitle:'COMICIFYING...',  loadSub:'Inking the panels',               prompt:'Transform this image into bold comic book art. Apply thick ink outlines, Ben-Day halftone dot patterns, flat bright primary colours, dramatic cel-shaded shadows, and the bold graphic style of classic American superhero comics.' },
+    pixel:     { icon:'🎮', label:'PIXELIFY',   loadTitle:'PIXELIFYING...',  loadSub:'Crunching into 8-bit',       prompt:'Convert this image into pixel art using a very low resolution (32x32 or 64x64 grid). Each pixel should be clearly visible and blocky, with hard edges (no smoothing). Use nearest-neighbor scaling. Simplify details heavily, with large pixel blocks, flat colors, and thick outlines. Chibi proportions, minimal shading, retro game avatar style.' },
+    ghibli:    { icon:'🌿', label:'GHIBLIFY',   loadTitle:'GHIBLIFYING...',  loadSub:'Summoning forest spirits',    prompt:'COMPLETELY and DRAMATICALLY repaint this entire image in full Studio Ghibli animation style. Fully repaint everything with lush hand-drawn watercolour textures, extremely warm glowing golden-hour lighting, beautifully rounded soft character designs, incredibly detailed painterly natural environments with rich foliage and clouds. The transformation should be total and unmistakable — nothing should look like a photo. Make it look exactly like a frame from a Miyazaki film with rich painterly detail everywhere.' },
+    baby:      { icon:'🍼', label:'BABIFY',     loadTitle:'BABIFYING...',    loadSub:'Adding chubby cheeks',        prompt:'EXTREMELY and DRAMATICALLY transform everything in this image into the most exaggerated baby version imaginable. Give every subject a gigantic oversized round head that is at least 70% of the body size, massively chubby balloon cheeks, a tiny stubby little body, enormous sparkly innocent eyes taking up half the face, and bright rosy cheeks. Make everything look cartoonishly babyish and adorable to an extreme degree. The proportions should be wildly exaggerated.' },
+    chibi:     { icon:'✨', label:'CHIBIFY',    loadTitle:'CHIBIFYING...',   loadSub:'Enlarging the head ratio',    prompt:'EXTREMELY transform this image into the most exaggerated chibi anime style possible. Use wildly exaggerated proportions: an enormous head at least 4x the size of the tiny stubby body, massive sparkling anime eyes that take up 40% of the face, a tiny button nose, bright neon-saturated colours, and the most extreme over-the-top cute chibi proportions imaginable. Make the head absolutely massive compared to the body. Nothing subtle — go maximum chibi.' },
+    anime:     { icon:'⚡', label:'ANIMIFY',    loadTitle:'ANIMIFYING...',   loadSub:'Drawing the outlines',        prompt:'COMPLETELY redraw this image as dramatic high-quality anime art. Apply very thick bold black ink outlines around everything, strong cel-shading with hard flat colour fills and dramatic dark shadows, dynamic lighting with strong highlights, large expressive anime eyes, and the dramatic visual style of a high-budget action anime series. Make the colours extremely vibrant and saturated. Every element should look fully hand-drawn in anime style.' },
+    dumb:      { icon:'🧠', label:'DUMBIFY',    loadTitle:'DUMBIFYING...',   loadSub:'Lowering the IQ...',          prompt:'COMPLETELY transform this image into the most absurd, dumb, low-effort meme style possible. Make everything look intentionally stupid and low-quality — add googly eyes on every face, give everyone a derpy cross-eyed expression, use MS Paint style scribbles and fills, add random impact font meme text, make colours garish and clashing, give people silly hats or accessories, distort faces to look as dumb and goofy as possible. The dumber and more absurd the better.' },
+    comic:     { icon:'💥', label:'COMICIFY',   loadTitle:'COMICIFYING...',  loadSub:'Inking the panels',           prompt:'COMPLETELY transform this image into the most dramatic bold comic book art possible. Apply extremely thick heavy black ink outlines around absolutely everything, aggressive Ben-Day halftone dot patterns covering all shaded areas, flat bright primary colours with zero gradients, extremely dramatic hard shadows, action lines, and the most bold graphic style of classic American superhero comics. Make it look like it was printed in a 1960s Marvel comic.' },
   };
 
   // Nav
