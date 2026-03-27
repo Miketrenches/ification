@@ -372,21 +372,10 @@
         throw new Error(e?.error?.message || `Gemini API error ${res.status}`);
       }
 
-      const data  = await res.json();
-      const parts = data?.candidates?.[0]?.content?.parts || [];
-      let imgB64 = null, imgMime = 'image/png';
-
-      for (const part of parts) {
-        const id = part.inlineData || part.inline_data;
-        if (id) {
-          const m = id.mimeType || id.mime_type || '';
-          if (m.startsWith('image/')) {
-            imgB64  = id.data;
-            imgMime = m;
-            break;
-          }
-        }
-      }
+const data = await res.json();
+if (data.error) throw new Error(data.error);
+const imgB64 = data.imageData;
+const imgMime = data.mimeType || 'image/png';
 
       if (!imgB64) {
         const textPart = parts.find(p => p.text && p.text.trim().length > 2);
