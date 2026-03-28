@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -229,6 +228,7 @@
   .card-anime{--ca:#B84FFF;--cb:#FF3D9A}
   .card-dumb{--ca:#FFE500;--cb:#FF6B00}
   .card-comic{--ca:#FF3D9A;--cb:#B84FFF}
+  .card-game{--ca:#00FFD0;--cb:#1B8EFF}
 
   .next-btn{font-family:'Bangers',cursive;font-size:1.4rem;letter-spacing:.1em;color:#0A0010;background:linear-gradient(135deg,var(--accent2),var(--accent));border:none;border-radius:100px;padding:14px 48px;cursor:pointer;box-shadow:0 6px 0 #7B00BE,0 14px 30px rgba(184,79,255,.4);transition:all .15s}
   .next-btn:hover{transform:translateY(-3px);box-shadow:0 10px 0 #7B00BE,0 20px 40px rgba(184,79,255,.5)}
@@ -304,7 +304,7 @@
 
   <!-- TOP NAV -->
   <div class="top-nav">
-    <a href="" class="top-nav-btn x-btn">
+    <a href="#" class="top-nav-btn x-btn">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.911-5.622Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
       Community
     </a>
@@ -349,6 +349,7 @@
     <div class="style-card card-anime"  data-style="anime"  onclick="selectStyle(this)"><div class="check">✓</div><div class="icon">⚡</div><div class="name">ANIM<em>IFY</em></div><div class="desc">Cel-shaded anime art</div></div>
     <div class="style-card card-dumb"   data-style="dumb"   onclick="selectStyle(this)"><div class="check">✓</div><div class="icon">🧠</div><div class="name">DUMB<em>IFY</em></div><div class="desc">Dumb it all the way down</div></div>
     <div class="style-card card-comic"  data-style="comic"  onclick="selectStyle(this)"><div class="check">✓</div><div class="icon">💥</div><div class="name">COMIC<em>IFY</em></div><div class="desc">Bold comic book halftones</div></div>
+    <div class="style-card card-game"   data-style="game"   onclick="selectStyle(this)"><div class="check">✓</div><div class="icon">🕹️</div><div class="name">GAME<em>IFY</em></div><div class="desc">Low-poly 3D game character</div></div>
   </div>
   <button class="next-btn" id="nextBtn" onclick="goToPage(3)" disabled>CHOOSE IMAGE →</button>
 </div>
@@ -413,6 +414,7 @@
     chibi:  { icon:'✨', label:'CHIBIFY',   loadTitle:'CHIBIFYING...',   loadSub:'Enlarging the head ratio', prompt:'EXTREMELY transform this image into the most exaggerated chibi anime style possible. Use wildly exaggerated proportions: an enormous head at least 4x the size of the tiny stubby body, massive sparkling anime eyes that take up 40% of the face, a tiny button nose, bright neon-saturated colours, and the most extreme over-the-top cute chibi proportions imaginable. Make the head absolutely massive compared to the body. Nothing subtle — go maximum chibi.' },
     anime:  { icon:'⚡', label:'ANIMIFY',   loadTitle:'ANIMIFYING...',   loadSub:'Drawing the outlines',     prompt:'COMPLETELY redraw this image as dramatic high-quality anime art. Apply very thick bold black ink outlines around everything, strong cel-shading with hard flat colour fills and dramatic dark shadows, dynamic lighting with strong highlights, large expressive anime eyes, and the dramatic visual style of a high-budget action anime series. Make the colours extremely vibrant and saturated. Every element should look fully hand-drawn in anime style.' },
     dumb:   { icon:'🧠', label:'DUMBIFY',   loadTitle:'DUMBIFYING...',   loadSub:'Lowering the IQ...',       prompt:'COMPLETELY transform this image into the most absurd, dumb, low-effort meme style possible. Make everything look intentionally stupid and low-quality — add googly eyes on every face, give everyone a derpy cross-eyed expression, use MS Paint style scribbles and fills, add random impact font meme text, make colours garish and clashing, give people silly hats or accessories, distort faces to look as dumb and goofy as possible. The dumber and more absurd the better.' },
+    game:   { icon:'🕹️', label:'GAMEIFY',   loadTitle:'GAMEIFYING...',   loadSub:'Rendering polygons...',    prompt:'Transform this image into a low-poly 3D game character style, exactly like an early PS2/PS3 era video game or low-budget indie game. Break down all features into flat-shaded geometric triangular polygons with no texture smoothing whatsoever. Each face of the model should be a solid flat colour with hard angular edges. Hair should be made of sharp geometric spikes, face features simplified into flat polygon planes, clothing rendered as blocky angular shapes. Use the exact aesthetic of the Gameify meme — low-poly flat shading, geometric angular faces, early 3D video game character look. No realistic lighting, no smooth curves, everything is hard flat polygons.' },
     comic:  { icon:'💥', label:'COMICIFY',  loadTitle:'COMICIFYING...',  loadSub:'Inking the panels',        prompt:'COMPLETELY transform this image into the most dramatic bold comic book art possible. Apply extremely thick heavy black ink outlines around absolutely everything, aggressive Ben-Day halftone dot patterns covering all shaded areas, flat bright primary colours with zero gradients, extremely dramatic hard shadows, action lines, and the most bold graphic style of classic American superhero comics. Make it look like it was printed in a 1960s Marvel comic.' },
   };
 
