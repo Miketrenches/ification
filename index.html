@@ -4,345 +4,369 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>IMAGINE</title>
-<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Fredoka+One&family=Nunito:wght@400;700;900&family=Noto+Sans+JP:wght@400;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  @font-face {
+    font-family: 'PokemonSolid';
+    src: url('PokemonSolidNormal-xyWR.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+</style>
 <style>
 :root {
+  --white: #FFFFFF;
+  --off-white: #F0F0F0;
+  --grey: rgba(255,255,255,0.45);
+  --grey-dim: rgba(255,255,255,0.15);
+  --dark: #0A0A0A;
+  --darker: #050505;
+  --card-border: rgba(255,255,255,0.08);
+  --card-bg: rgba(255,255,255,0.03);
   --blue: #00BFFF;
-  --gold: #FFD700;
-  --purple: #9B30FF;
-  --pink: #FF3DB4;
-  --dark: #080612;
-  --darker: #040309;
-  --blue-glow: rgba(0,191,255,0.25);
-  --purple-glow: rgba(155,48,255,0.25);
-  --pink-glow: rgba(255,61,180,0.3);
+  --accent: #FFFFFF;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--darker);font-family:'Nunito',sans-serif;overflow-x:hidden;}
-body::after{content:'';position:fixed;inset:0;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:9998;}
+html{scroll-behavior:smooth;}
+body{background:var(--darker);font-family:'Space Grotesk',sans-serif;overflow-x:hidden;color:white;}
 
 .page{display:none;min-height:100vh;position:relative;}
 .page.active{display:flex;flex-direction:column;}
-
 canvas{display:none;}
 
-/* ── ANIMATIONS ── */
-@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-@keyframes logoPop{from{opacity:0;transform:scale(0.4) rotate(-6deg)}to{opacity:1;transform:scale(1) rotate(0deg)}}
-@keyframes float{0%,100%{transform:translateY(0px) rotate(-1deg)}50%{transform:translateY(-20px) rotate(1deg)}}
-@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes logoPop{from{opacity:0;transform:scale(0.85)}to{opacity:1;transform:scale(1)}}
 @keyframes spin2{to{transform:rotate(360deg)}}
-@keyframes pulse{0%,100%{opacity:0.4}50%{opacity:1}}
-@keyframes sakura{0%{transform:translateY(-20px) translateX(0) rotate(0deg);opacity:1}100%{transform:translateY(110vh) translateX(120px) rotate(720deg);opacity:0}}
-@keyframes twinkle{0%,100%{opacity:0.1;transform:scale(0.8)}50%{opacity:1;transform:scale(1.4)}}
-@keyframes speedLine{0%{opacity:0;transform:scaleX(0)}50%{opacity:0.4}100%{opacity:0;transform:scaleX(1)}}
-@keyframes moonGlow{0%,100%{filter:drop-shadow(0 0 15px rgba(255,215,0,0.6))}50%{filter:drop-shadow(0 0 35px rgba(255,215,0,1)) drop-shadow(0 0 60px rgba(255,215,0,0.4))}}
-@keyframes borderShimmer{0%{box-shadow:0 0 20px rgba(0,191,255,0.4),0 0 40px rgba(155,48,255,0.2)}50%{box-shadow:0 0 30px rgba(255,61,180,0.5),0 0 60px rgba(0,191,255,0.3)}100%{box-shadow:0 0 20px rgba(0,191,255,0.4),0 0 40px rgba(155,48,255,0.2)}}
-@keyframes gradShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
-@keyframes kanji{0%{opacity:0;transform:translateY(0)}20%{opacity:0.15}80%{opacity:0.15}100%{opacity:0;transform:translateY(-60px)}}
+@keyframes pulse{0%,100%{opacity:0.3}50%{opacity:0.8}}
+@keyframes grokRotate{0%{transform:translate(-50%,-50%) rotate(0deg)}100%{transform:translate(-50%,-50%) rotate(360deg)}}
+@keyframes grokPulse{0%,100%{opacity:0.04}50%{opacity:0.08}}
+@keyframes sakura{0%{transform:translateY(-20px) translateX(0) rotate(0deg);opacity:0.6}100%{transform:translateY(105vh) translateX(80px) rotate(540deg);opacity:0}}
+@keyframes twinkle{0%,100%{opacity:0.08}50%{opacity:0.5}}
+@keyframes lineSlide{0%{opacity:0;transform:translateX(-100%)}50%{opacity:1}100%{opacity:0;transform:translateX(200%)}}
 
 /* ── BACK NAV ── */
-.back-nav{position:fixed;top:20px;left:20px;z-index:1000;display:none;}
+.back-nav{position:fixed;top:24px;left:24px;z-index:1000;display:none;}
 .back-nav.visible{display:block;}
-.back-btn{font-family:'Fredoka One',cursive;font-size:.85rem;color:rgba(255,255,255,.6);background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:100px;padding:9px 18px;cursor:pointer;transition:all .2s;backdrop-filter:blur(10px);}
-.back-btn:hover{color:white;background:rgba(0,191,255,.15);border-color:var(--blue);}
+.back-btn{font-family:'Space Grotesk',sans-serif;font-size:.8rem;font-weight:500;letter-spacing:.08em;color:var(--grey);background:rgba(255,255,255,.04);border:1px solid var(--card-border);border-radius:8px;padding:8px 16px;cursor:pointer;transition:all .2s;}
+.back-btn:hover{color:white;background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.2);}
 
 /* ════════════════════════════════
-   PAGE 1 — LANDING
+   PAGE 1
 ════════════════════════════════ */
 #page1{
-  background:
-    radial-gradient(ellipse at 15% 40%, rgba(155,48,255,0.2) 0%, transparent 50%),
-    radial-gradient(ellipse at 85% 20%, rgba(0,191,255,0.15) 0%, transparent 45%),
-    radial-gradient(ellipse at 50% 85%, rgba(255,61,180,0.12) 0%, transparent 45%),
-    var(--darker);
-  align-items:center;justify-content:center;overflow:hidden;
-  padding:100px 24px 80px;
+  background:var(--darker);
+  align-items:center;justify-content:center;
+  overflow:hidden;
   min-height:100vh;
+  padding:120px 24px 80px;
 }
 
-/* Torii gate silhouette */
-.torii{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:900px;opacity:0.04;pointer-events:none;z-index:0;}
+/* Grok logo background */
+.grok-bg{
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:min(70vw,600px);
+  height:min(70vw,600px);
+  opacity:0.045;
+  pointer-events:none;
+  z-index:0;
+  animation:grokPulse 8s ease-in-out infinite;
+}
 
-/* Moon */
-.moon{position:absolute;top:8%;right:8%;width:90px;height:90px;background:radial-gradient(circle at 35% 35%, #fff8dc, #FFD700);border-radius:50%;animation:moonGlow 4s ease-in-out infinite;opacity:0.85;z-index:1;pointer-events:none;}
-.moon::after{content:'';position:absolute;top:12px;right:8px;width:22px;height:22px;background:rgba(255,215,0,0.15);border-radius:50%;}
+/* subtle noise */
+#page1::after{
+  content:'';position:absolute;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:0;
+}
 
 /* Stars */
-.stars-layer{position:absolute;inset:0;pointer-events:none;z-index:0;}
-.star-dot{position:absolute;background:white;border-radius:50%;animation:twinkle 3s ease-in-out infinite;}
-
-/* Kanji layer */
-.kanji-layer{position:absolute;inset:0;pointer-events:none;z-index:1;overflow:hidden;}
-.kanji-char{position:absolute;font-family:'Noto Sans JP',sans-serif;font-weight:900;color:white;animation:kanji 8s ease-in-out infinite;}
-
-/* Speed lines */
-.speed-lines{position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
-.speed-line{position:absolute;height:2px;background:linear-gradient(90deg,transparent,var(--blue),transparent);animation:speedLine 3s ease-in-out infinite;}
+.stars-layer{position:absolute;inset:0;pointer-events:none;z-index:1;}
+.star-dot{position:absolute;background:white;border-radius:50%;animation:twinkle 4s ease-in-out infinite;}
 
 /* Sakura */
 .sakura-layer{position:absolute;inset:0;pointer-events:none;z-index:1;overflow:hidden;}
-.petal{position:absolute;font-size:18px;animation:sakura linear infinite;opacity:0.7;}
+.petal{position:absolute;animation:sakura linear infinite;}
+
+/* Kanji deco — very subtle */
+.kanji-deco{
+  position:absolute;
+  font-family:'Space Grotesk',sans-serif;
+  color:rgba(255,255,255,0.025);
+  pointer-events:none;z-index:0;
+  font-weight:700;
+  user-select:none;
+}
+
+/* Horizontal rule lines */
+.hr-line{
+  position:absolute;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.06),transparent);
+  pointer-events:none;z-index:1;
+  animation:lineSlide 6s ease-in-out infinite;
+}
 
 /* TOP NAV */
 .top-nav{
-  position:absolute;top:18px;left:50%;transform:translateX(-50%);
+  position:absolute;top:24px;left:50%;transform:translateX(-50%);
   display:flex;align-items:center;
-  background:rgba(0,0,0,.4);
-  border:1px solid rgba(0,191,255,0.2);
-  border-radius:100px;padding:5px 8px;z-index:100;
-  backdrop-filter:blur(14px);
-  animation:borderShimmer 4s ease-in-out infinite;
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--card-border);
+  border-radius:10px;padding:4px 6px;z-index:100;
+  backdrop-filter:blur(20px);
+  white-space:nowrap;
 }
-.top-nav-btn{display:flex;align-items:center;gap:6px;font-family:'Fredoka One',cursive;font-size:.8rem;color:rgba(255,255,255,.6);text-decoration:none;padding:7px 16px;border-radius:100px;transition:all .2s;white-space:nowrap;}
-.top-nav-btn:hover{color:white;background:rgba(0,191,255,.1);}
-.x-btn:hover{color:white;}
-.ca-btn:hover{color:var(--gold);}
-.dex-btn:hover{color:var(--blue);}
-.top-nav-divider{width:1px;height:16px;background:rgba(0,191,255,.2);margin:0 2px;}
+.top-nav-btn{
+  display:flex;align-items:center;gap:6px;
+  font-family:'Space Grotesk',sans-serif;font-size:.75rem;font-weight:500;letter-spacing:.06em;
+  color:var(--grey);text-decoration:none;
+  padding:7px 16px;border-radius:7px;transition:all .2s;
+}
+.top-nav-btn:hover{color:white;background:rgba(255,255,255,.06);}
+.top-nav-divider{width:1px;height:14px;background:var(--card-border);margin:0 2px;}
 
-/* HERO */
-.hero{display:flex;align-items:center;justify-content:center;gap:60px;z-index:10;width:100%;max-width:1200px;flex-wrap:wrap;}
+/* HERO CONTENT */
+.hero-content{
+  position:relative;z-index:2;
+  text-align:center;
+  max-width:760px;
+  width:100%;
+}
 
-/* Char */
-.hero-char{width:360px;flex-shrink:0;border-radius:28px;animation:float 5s ease-in-out infinite;filter:drop-shadow(0 0 30px rgba(0,191,255,0.5)) drop-shadow(0 0 60px rgba(155,48,255,0.3));position:relative;z-index:2;}
-
-/* Hero text */
-.hero-text{text-align:left;z-index:2;max-width:520px;}
-
-.hero-tag{
+.hero-eyebrow{
   display:inline-flex;align-items:center;gap:8px;
-  font-family:'Fredoka One',cursive;font-size:.8rem;letter-spacing:.3em;
-  color:var(--blue);text-transform:uppercase;margin-bottom:14px;
-  background:rgba(0,191,255,.07);border:1px solid rgba(0,191,255,.2);
-  border-radius:100px;padding:6px 16px;
+  font-size:.72rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--grey);
+  margin-bottom:28px;
   opacity:0;animation:fadeUp .5s .1s forwards;
 }
+.hero-eyebrow::before,.hero-eyebrow::after{content:'';display:inline-block;width:24px;height:1px;background:var(--grey-dim);}
 
 .logo-main{
-  font-family:'Bangers',cursive;
-  font-size:clamp(5rem,13vw,9rem);
-  line-height:.85;
-  background:linear-gradient(135deg,#fff 0%,var(--blue) 35%,var(--purple) 65%,var(--pink) 100%);
-  background-size:300% 300%;
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  animation:gradShift 5s ease infinite, logoPop .9s .2s cubic-bezier(.34,1.56,.64,1) both;
-  letter-spacing:.04em;
-  filter:drop-shadow(0 0 30px rgba(0,191,255,0.4));
+  font-family:'PokemonSolid',cursive;
+  font-size:clamp(4rem,14vw,10rem);
+  line-height:0.9;
+  letter-spacing:.06em;
+  color:white;
+  -webkit-text-stroke: 3px rgba(255,255,255,0.15);
+  opacity:0;animation:logoPop .8s .2s cubic-bezier(.22,1,.36,1) forwards;
+  filter:drop-shadow(0 0 40px rgba(255,255,255,0.1));
 }
 
 .logo-jp{
-  font-family:'Noto Sans JP',sans-serif;font-weight:900;
-  font-size:1rem;letter-spacing:.3em;
-  color:rgba(255,255,255,.2);margin-top:6px;
-  opacity:0;animation:fadeUp .5s .7s forwards;
+  font-size:.75rem;font-weight:400;letter-spacing:.5em;
+  color:rgba(255,255,255,0.12);
+  margin-top:12px;
+  display:block;
+  opacity:0;animation:fadeUp .5s .6s forwards;
 }
 
 .logo-sub{
-  font-family:'Fredoka One',cursive;font-size:clamp(.9rem,1.8vw,1.1rem);
-  color:rgba(255,255,255,.45);letter-spacing:.1em;margin-top:16px;
-  opacity:0;animation:fadeUp .5s .9s forwards;
+  font-size:clamp(.9rem,1.5vw,1.05rem);font-weight:400;
+  color:var(--grey);letter-spacing:.04em;
+  margin-top:20px;line-height:1.6;
+  opacity:0;animation:fadeUp .5s .8s forwards;
 }
 
 .grok-badge{
-  display:inline-flex;align-items:center;gap:8px;
-  background:rgba(155,48,255,.08);border:1px solid rgba(155,48,255,.25);
-  border-radius:100px;padding:7px 18px;margin-top:18px;
-  font-family:'Fredoka One',cursive;font-size:.82rem;color:rgba(255,255,255,.5);
-  opacity:0;animation:fadeUp .5s 1.1s forwards;
+  display:inline-flex;align-items:center;gap:10px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid var(--card-border);
+  border-radius:8px;padding:8px 20px;
+  margin-top:24px;
+  font-size:.75rem;font-weight:500;letter-spacing:.1em;
+  color:var(--grey);
+  opacity:0;animation:fadeUp .5s 1s forwards;
 }
-.grok-badge span{color:var(--purple);}
+.grok-badge .grok-logo-inline{
+  display:inline-block;width:16px;height:16px;
+  opacity:0.6;
+}
 
-/* Style pills */
-.preview-collage{display:flex;gap:10px;margin-top:28px;flex-wrap:wrap;opacity:0;animation:fadeUp .6s 1.2s forwards;}
-.style-pill{
-  background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.1);
-  border-radius:100px;padding:8px 18px;
-  font-family:'Fredoka One',cursive;font-size:.85rem;color:rgba(255,255,255,.65);
-  cursor:pointer;transition:all .2s;position:relative;overflow:hidden;backdrop-filter:blur(8px);
+/* Style pills row */
+.style-pills{
+  display:flex;gap:8px;margin-top:28px;flex-wrap:wrap;justify-content:center;
+  opacity:0;animation:fadeUp .6s 1.1s forwards;
 }
-.style-pill::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--pill-a),var(--pill-b));opacity:0;transition:opacity .3s;}
-.style-pill:hover::before{opacity:1;}
-.style-pill:hover{border-color:transparent;transform:translateY(-2px) scale(1.06);color:white;}
-.style-pill span{position:relative;z-index:1;}
-.pill-1{--pill-a:#00BFFF;--pill-b:#9B30FF;}
-.pill-2{--pill-a:#9B30FF;--pill-b:#FF3DB4;}
-.pill-3{--pill-a:#FF3DB4;--pill-b:#FFD700;}
-.pill-4{--pill-a:#FFD700;--pill-b:#00BFFF;}
+.style-pill{
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--card-border);
+  border-radius:7px;padding:7px 16px;
+  font-size:.78rem;font-weight:500;letter-spacing:.06em;
+  color:var(--grey);
+  cursor:pointer;transition:all .18s;
+}
+.style-pill:hover{color:white;background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.2);}
 
 /* CTA */
 .cta-btn{
-  margin-top:32px;display:inline-block;
-  font-family:'Bangers',cursive;font-size:1.5rem;letter-spacing:.12em;
-  color:#04030a;
-  background:linear-gradient(135deg,var(--blue),var(--purple),var(--pink));
-  background-size:200% 200%;animation:gradShift 3s ease infinite;
-  border:none;border-radius:100px;padding:16px 52px;cursor:pointer;
-  box-shadow:0 6px 0 rgba(0,0,0,.5),0 16px 40px rgba(0,191,255,.4);
-  transition:all .15s;
-  opacity:0;animation:fadeUp .5s 1.4s forwards, gradShift 3s 1.9s ease infinite;
+  display:inline-block;margin-top:36px;
+  font-family:'Space Grotesk',sans-serif;
+  font-size:.9rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+  color:black;
+  background:white;
+  border:none;border-radius:8px;
+  padding:15px 44px;cursor:pointer;
+  transition:all .18s;
+  opacity:0;animation:fadeUp .5s 1.3s forwards;
 }
-.cta-btn:hover{transform:translateY(-4px);box-shadow:0 10px 0 rgba(0,0,0,.5),0 24px 50px rgba(155,48,255,.5);}
-.cta-btn:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(0,0,0,.5);}
+.cta-btn:hover{background:var(--off-white);transform:translateY(-2px);box-shadow:0 8px 30px rgba(255,255,255,0.15);}
+.cta-btn:active{transform:translateY(1px);}
 
-/* Decorative kanji floaters */
-.deco-kanji{
-  position:absolute;font-family:'Noto Sans JP',sans-serif;font-weight:900;
-  color:rgba(0,191,255,0.06);pointer-events:none;z-index:0;
-  font-size:clamp(80px,15vw,200px);line-height:1;user-select:none;
+/* Stats row */
+.stats-row{
+  display:flex;gap:40px;justify-content:center;
+  margin-top:56px;padding-top:40px;
+  border-top:1px solid var(--card-border);
+  opacity:0;animation:fadeUp .6s 1.5s forwards;
 }
+.stat-item{text-align:center;}
+.stat-num{font-family:'Bangers',cursive;font-size:2.2rem;color:white;letter-spacing:.05em;line-height:1;}
+.stat-label{font-size:.7rem;font-weight:500;letter-spacing:.15em;text-transform:uppercase;color:var(--grey);margin-top:4px;}
 
 /* ════════════════════════════════
-   PAGE 2 — STYLE PICKER
+   PAGE 2
 ════════════════════════════════ */
 #page2{
-  background:
-    radial-gradient(ellipse at 10% 20%, rgba(0,191,255,.1) 0%, transparent 45%),
-    radial-gradient(ellipse at 90% 80%, rgba(255,61,180,.08) 0%, transparent 45%),
-    var(--dark);
-  padding:50px 24px 70px;align-items:center;
+  background:var(--dark);
+  padding:60px 24px 80px;align-items:center;
 }
 
-.page2-header{text-align:center;margin-bottom:44px;position:relative;}
-.page2-header .jp-sub{font-family:'Noto Sans JP',sans-serif;font-size:.75rem;color:rgba(255,255,255,.15);letter-spacing:.4em;margin-bottom:10px;display:block;}
-.page2-header h2{font-family:'Bangers',cursive;font-size:clamp(2.5rem,8vw,5rem);letter-spacing:.06em;line-height:1;}
-.page2-header h2 .w1{color:white;}
-.page2-header h2 .w2{
-  background:linear-gradient(135deg,var(--blue),var(--purple));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+.page2-header{text-align:center;margin-bottom:52px;}
+.page2-header h2{
+  font-family:'Bangers',cursive;
+  font-size:clamp(2.5rem,7vw,4.5rem);
+  color:white;letter-spacing:.06em;line-height:1;
 }
-.page2-header p{color:rgba(255,255,255,.3);font-size:.9rem;margin-top:10px;font-family:'Fredoka One',cursive;letter-spacing:.1em;}
-.page2-divider{width:80px;height:3px;background:linear-gradient(90deg,var(--blue),var(--purple),var(--pink));border-radius:100px;margin:16px auto 0;}
+.page2-header h2 span{color:rgba(255,255,255,0.35);}
+.page2-header p{font-size:.82rem;font-weight:400;color:var(--grey);margin-top:12px;letter-spacing:.06em;}
+.page2-divider{width:40px;height:1px;background:var(--card-border);margin:18px auto 0;}
 
 /* Style grid */
-.style-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:20px;max-width:960px;width:100%;margin-bottom:44px;}
+.style-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:14px;max-width:980px;width:100%;margin-bottom:48px;}
 
 .style-card{
-  width:200px;flex-shrink:0;
-  background:rgba(255,255,255,.03);
-  border:1.5px solid rgba(255,255,255,.07);
-  border-radius:24px;padding:30px 20px 24px;
+  width:196px;flex-shrink:0;
+  background:var(--card-bg);
+  border:1px solid var(--card-border);
+  border-radius:14px;
+  padding:28px 18px 22px;
   text-align:center;cursor:pointer;
-  transition:all .28s cubic-bezier(.34,1.56,.64,1);
+  transition:all .22s ease;
   position:relative;overflow:hidden;
 }
-.style-card::before{content:'';position:absolute;inset:0;border-radius:22px;background:linear-gradient(135deg,var(--ca),var(--cb));opacity:0;transition:opacity .3s;}
-.style-card:hover{transform:translateY(-10px) scale(1.04);border-color:transparent;box-shadow:0 24px 60px rgba(0,0,0,.5),0 0 30px var(--cglow);}
-.style-card:hover::before{opacity:.12;}
-.style-card.selected{border-color:var(--ca);box-shadow:0 0 0 3px rgba(0,191,255,.25),0 20px 50px rgba(0,0,0,.4);transform:translateY(-10px) scale(1.04);}
-.style-card.selected::before{opacity:.18;}
-.style-card .card-icon{font-size:3.2rem;margin-bottom:14px;position:relative;z-index:1;display:block;}
-.style-card .card-name{font-family:'Bangers',cursive;font-size:1.7rem;letter-spacing:.06em;color:white;position:relative;z-index:1;line-height:1;}
-.style-card .card-jp{font-family:'Noto Sans JP',sans-serif;font-size:.6rem;color:rgba(255,255,255,.2);margin-top:3px;position:relative;z-index:1;display:block;letter-spacing:.2em;}
-.style-card .card-desc{font-size:.72rem;color:rgba(255,255,255,.35);margin-top:8px;line-height:1.5;position:relative;z-index:1;}
-.style-card .check{position:absolute;top:12px;right:13px;width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--ca),var(--cb));display:flex;align-items:center;justify-content:center;font-size:12px;opacity:0;transition:opacity .2s;z-index:2;color:white;font-weight:900;}
+.style-card::before{
+  content:'';position:absolute;inset:0;border-radius:13px;
+  background:rgba(255,255,255,0.04);opacity:0;transition:opacity .25s;
+}
+.style-card:hover{transform:translateY(-6px);border-color:rgba(255,255,255,0.2);box-shadow:0 20px 50px rgba(0,0,0,0.6);}
+.style-card:hover::before{opacity:1;}
+.style-card.selected{border-color:rgba(255,255,255,0.5);background:rgba(255,255,255,0.06);transform:translateY(-6px);box-shadow:0 20px 50px rgba(0,0,0,0.6);}
+.style-card.selected::before{opacity:1;}
+.style-card .card-icon{font-size:2.8rem;margin-bottom:14px;display:block;}
+.style-card .card-name{font-family:'Bangers',cursive;font-size:1.6rem;letter-spacing:.08em;color:white;line-height:1;}
+.style-card .card-jp{font-size:.6rem;font-weight:400;color:rgba(255,255,255,0.18);margin-top:4px;display:block;letter-spacing:.25em;}
+.style-card .card-desc{font-size:.7rem;font-weight:400;color:var(--grey);margin-top:10px;line-height:1.5;}
+.style-card .check{
+  position:absolute;top:12px;right:12px;
+  width:22px;height:22px;border-radius:50%;
+  background:white;display:flex;align-items:center;justify-content:center;
+  font-size:10px;opacity:0;transition:opacity .2s;z-index:2;color:black;font-weight:900;
+}
 .style-card.selected .check{opacity:1;}
 
-.card-anime{--ca:#FF3DB4;--cb:#9B30FF;--cglow:rgba(255,61,180,0.3);}
-.card-pixel{--ca:#00BFFF;--cb:#0080FF;--cglow:rgba(0,191,255,0.3);}
-.card-ghibli{--ca:#39D353;--cb:#00C9B1;--cglow:rgba(57,211,83,0.25);}
-.card-baby{--ca:#FF3DB4;--cb:#FF6B00;--cglow:rgba(255,61,180,0.3);}
-.card-chibi{--ca:#FFD700;--cb:#FF6B00;--cglow:rgba(255,215,0,0.3);}
-.card-comic{--ca:#FF3DB4;--cb:#9B30FF;--cglow:rgba(155,48,255,0.3);}
-.card-dumb{--ca:#FFD700;--cb:#FF3DB4;--cglow:rgba(255,215,0,0.3);}
-.card-game{--ca:#00BFFF;--cb:#9B30FF;--cglow:rgba(0,191,255,0.3);}
-
 .next-btn{
-  font-family:'Bangers',cursive;font-size:1.5rem;letter-spacing:.12em;
-  color:#04030a;
-  background:linear-gradient(135deg,var(--blue),var(--purple));
-  border:none;border-radius:100px;padding:15px 52px;cursor:pointer;
-  box-shadow:0 6px 0 rgba(0,0,0,.5),0 14px 35px rgba(0,191,255,.35);
-  transition:all .15s;
+  font-family:'Space Grotesk',sans-serif;font-size:.85rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+  color:black;background:white;
+  border:none;border-radius:8px;padding:14px 44px;cursor:pointer;
+  transition:all .18s;
 }
-.next-btn:hover{transform:translateY(-3px);box-shadow:0 10px 0 rgba(0,0,0,.5),0 20px 45px rgba(155,48,255,.45);}
-.next-btn:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(0,0,0,.5);}
-.next-btn:disabled{opacity:.3;cursor:not-allowed;transform:none;}
+.next-btn:hover{background:var(--off-white);transform:translateY(-2px);box-shadow:0 8px 30px rgba(255,255,255,.12);}
+.next-btn:active{transform:translateY(1px);}
+.next-btn:disabled{opacity:.25;cursor:not-allowed;transform:none;box-shadow:none;}
 
 /* ════════════════════════════════
-   PAGE 3 — UPLOAD
+   PAGE 3
 ════════════════════════════════ */
 #page3{
-  background:
-    radial-gradient(ellipse at 80% 10%, rgba(0,191,255,.1) 0%, transparent 45%),
-    radial-gradient(ellipse at 20% 90%, rgba(155,48,255,.1) 0%, transparent 45%),
-    var(--dark);
-  padding:50px 24px 70px;align-items:center;
+  background:var(--dark);
+  padding:60px 24px 80px;align-items:center;
 }
 
 .page3-header{text-align:center;margin-bottom:28px;}
-.page3-header .jp-label{font-family:'Noto Sans JP',sans-serif;font-size:.7rem;color:rgba(255,255,255,.15);letter-spacing:.4em;display:block;margin-bottom:8px;}
-.page3-header h2{font-family:'Bangers',cursive;font-size:clamp(2.2rem,7vw,4.5rem);color:white;letter-spacing:.06em;}
-.page3-header h2 span{background:linear-gradient(135deg,var(--blue),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.page3-header h2{font-family:'Bangers',cursive;font-size:clamp(2rem,6vw,4rem);color:white;letter-spacing:.06em;}
+.page3-header h2 span{color:rgba(255,255,255,0.35);}
 
-.badges-row{display:flex;align-items:center;flex-wrap:wrap;justify-content:center;gap:10px;margin-bottom:28px;}
+.badges-row{display:flex;align-items:center;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:28px;}
 .selected-badge{
   display:inline-flex;align-items:center;gap:8px;
-  background:rgba(0,191,255,.08);border:1.5px solid rgba(0,191,255,.25);
-  border-radius:100px;padding:8px 20px;
-  font-family:'Fredoka One',cursive;color:var(--blue);font-size:.9rem;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.15);
+  border-radius:8px;padding:7px 16px;
+  font-size:.75rem;font-weight:500;letter-spacing:.08em;color:white;
 }
 .powered-badge{
   display:inline-flex;align-items:center;gap:6px;
-  background:rgba(155,48,255,.07);border:1px solid rgba(155,48,255,.2);
-  border-radius:100px;padding:8px 16px;
-  font-family:'Fredoka One',cursive;color:var(--purple);font-size:.8rem;
+  background:rgba(255,255,255,.03);border:1px solid var(--card-border);
+  border-radius:8px;padding:7px 14px;
+  font-size:.72rem;font-weight:400;letter-spacing:.1em;color:var(--grey);
 }
 
 .upload-zone{
-  width:100%;max-width:740px;
-  border:2px dashed rgba(0,191,255,.2);border-radius:28px;
-  padding:50px 24px;text-align:center;cursor:pointer;
-  transition:all .3s;position:relative;
-  background:rgba(0,191,255,.02);margin-bottom:24px;
+  width:100%;max-width:760px;
+  border:1px dashed rgba(255,255,255,.12);border-radius:16px;
+  padding:60px 24px;text-align:center;cursor:pointer;
+  transition:all .25s;position:relative;
+  background:var(--card-bg);margin-bottom:24px;
 }
-.upload-zone:hover,.upload-zone.dragover{border-color:var(--blue);background:rgba(0,191,255,.06);transform:scale(1.01);}
+.upload-zone:hover,.upload-zone.dragover{border-color:rgba(255,255,255,.35);background:rgba(255,255,255,.05);}
 .upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
-.upload-zone .upload-icon{font-size:4rem;margin-bottom:14px;display:block;}
-.upload-zone p{font-family:'Fredoka One',cursive;color:rgba(255,255,255,.35);font-size:1rem;line-height:2;}
-.upload-zone p strong{color:var(--blue);}
-.upload-zone .upload-jp{font-family:'Noto Sans JP',sans-serif;font-size:.7rem;color:rgba(255,255,255,.1);letter-spacing:.3em;display:block;margin-top:8px;}
+.upload-zone .upload-icon{font-size:3rem;margin-bottom:16px;display:block;opacity:0.6;}
+.upload-zone .upload-title{font-size:.9rem;font-weight:600;color:white;letter-spacing:.05em;}
+.upload-zone .upload-sub{font-size:.75rem;font-weight:400;color:var(--grey);margin-top:6px;letter-spacing:.05em;}
+.upload-zone .upload-jp{font-size:.65rem;color:rgba(255,255,255,.1);letter-spacing:.3em;display:block;margin-top:12px;}
 
-.preview-area{width:100%;max-width:740px;display:none;flex-direction:column;gap:18px;align-items:center;}
+.preview-area{width:100%;max-width:760px;display:none;flex-direction:column;gap:18px;align-items:center;}
 .preview-area.visible{display:flex;}
-.img-panels{display:grid;grid-template-columns:1fr 1fr;gap:18px;width:100%;}
-.img-panel{border-radius:22px;overflow:hidden;position:relative;aspect-ratio:1;background:rgba(0,191,255,.04);border:1.5px solid rgba(0,191,255,.12);}
+.img-panels{display:grid;grid-template-columns:1fr 1fr;gap:16px;width:100%;}
+.img-panel{border-radius:14px;overflow:hidden;position:relative;aspect-ratio:1;background:rgba(255,255,255,.03);border:1px solid var(--card-border);}
 .img-panel img{width:100%;height:100%;object-fit:cover;display:block;}
-.img-panel .label{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);font-family:'Fredoka One',cursive;font-size:.7rem;background:rgba(0,0,0,.75);color:white;padding:4px 14px;border-radius:100px;white-space:nowrap;letter-spacing:.07em;backdrop-filter:blur(6px);}
+.img-panel .label{
+  position:absolute;bottom:10px;left:50%;transform:translateX(-50%);
+  font-size:.65rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+  background:rgba(0,0,0,.8);color:rgba(255,255,255,.7);
+  padding:4px 12px;border-radius:5px;white-space:nowrap;backdrop-filter:blur(8px);
+}
 .result-panel{position:relative;}
 
-.loading-overlay{position:absolute;inset:0;border-radius:20px;background:rgba(4,3,9,.92);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;z-index:3;backdrop-filter:blur(8px);}
+.loading-overlay{position:absolute;inset:0;border-radius:12px;background:rgba(5,5,5,.95);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;z-index:3;backdrop-filter:blur(8px);}
 .loading-overlay.hidden{display:none;}
-.spinner{width:54px;height:54px;border:4px solid rgba(0,191,255,.12);border-top-color:var(--blue);border-radius:50%;animation:spin2 .8s linear infinite;}
-.load-title{font-family:'Bangers',cursive;background:linear-gradient(135deg,var(--blue),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-size:1.2rem;letter-spacing:.06em;}
-.load-sub{font-family:'Fredoka One',cursive;color:rgba(255,255,255,.3);font-size:.75rem;animation:pulse 1.5s ease-in-out infinite;}
-.load-jp{font-family:'Noto Sans JP',sans-serif;font-size:.65rem;color:rgba(0,191,255,.2);letter-spacing:.3em;}
+.spinner{width:40px;height:40px;border:2px solid rgba(255,255,255,.08);border-top-color:white;border-radius:50%;animation:spin2 .8s linear infinite;}
+.load-title{font-family:'Bangers',cursive;color:white;font-size:1.1rem;letter-spacing:.1em;}
+.load-sub{font-size:.72rem;font-weight:400;color:var(--grey);animation:pulse 1.5s ease-in-out infinite;letter-spacing:.08em;}
 
 .result-placeholder{display:flex;align-items:center;justify-content:center;height:100%;flex-direction:column;gap:10px;}
-.result-placeholder span:first-child{font-size:2.8rem;}
-.result-placeholder span:last-child{font-family:'Fredoka One',cursive;color:rgba(255,255,255,.18);font-size:.75rem;}
+.result-placeholder span:first-child{font-size:2.4rem;opacity:0.3;}
+.result-placeholder span:last-child{font-size:.7rem;font-weight:400;color:rgba(255,255,255,.2);letter-spacing:.1em;}
 
 .transform-btn{
-  width:100%;max-width:740px;
-  font-family:'Bangers',cursive;font-size:1.6rem;letter-spacing:.12em;
-  color:#04030a;
-  background:linear-gradient(135deg,var(--blue),var(--purple),var(--pink));
-  background-size:200% 200%;animation:gradShift 3s ease infinite;
-  border:none;border-radius:100px;padding:18px;cursor:pointer;
-  box-shadow:0 6px 0 rgba(0,0,0,.5),0 16px 40px rgba(0,191,255,.35);
-  transition:transform .15s, box-shadow .15s;
+  width:100%;max-width:760px;
+  font-family:'Space Grotesk',sans-serif;font-size:.9rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;
+  color:black;background:white;
+  border:none;border-radius:8px;padding:18px;cursor:pointer;
+  transition:all .18s;
 }
-.transform-btn:hover{transform:translateY(-3px);box-shadow:0 10px 0 rgba(0,0,0,.5),0 24px 50px rgba(155,48,255,.45);}
-.transform-btn:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(0,0,0,.5);}
-.transform-btn:disabled{opacity:.35;cursor:not-allowed;transform:none;}
+.transform-btn:hover{background:var(--off-white);transform:translateY(-2px);box-shadow:0 10px 30px rgba(255,255,255,.12);}
+.transform-btn:active{transform:translateY(1px);}
+.transform-btn:disabled{opacity:.25;cursor:not-allowed;transform:none;}
 
-.error-msg{font-family:'Fredoka One',cursive;color:var(--pink);font-size:.82rem;text-align:center;display:none;max-width:740px;line-height:1.6;padding:14px 22px;background:rgba(255,61,180,.06);border:1px solid rgba(255,61,180,.2);border-radius:18px;}
+.error-msg{font-size:.78rem;font-weight:400;color:rgba(255,100,100,.8);text-align:center;display:none;max-width:760px;line-height:1.6;padding:14px 20px;background:rgba(255,80,80,.05);border:1px solid rgba(255,80,80,.15);border-radius:10px;}
 .error-msg.visible{display:block;}
 
-.download-btn{width:100%;max-width:740px;font-family:'Bangers',cursive;font-size:1.3rem;letter-spacing:.1em;color:white;background:rgba(0,191,255,.07);border:1.5px solid rgba(0,191,255,.2);border-radius:100px;padding:15px;cursor:pointer;transition:all .2s;display:none;}
+.download-btn{width:100%;max-width:760px;font-family:'Space Grotesk',sans-serif;font-size:.82rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--grey);background:rgba(255,255,255,.04);border:1px solid var(--card-border);border-radius:8px;padding:14px;cursor:pointer;transition:all .2s;display:none;}
 .download-btn.visible{display:block;}
-.download-btn:hover{background:rgba(0,191,255,.15);border-color:rgba(0,191,255,.4);}
+.download-btn:hover{color:white;background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.2);}
 </style>
 </head>
 <body>
@@ -350,69 +374,78 @@ canvas{display:none;}
 <canvas id="workCanvas"></canvas>
 
 <nav class="back-nav" id="backNav">
-  <button class="back-btn" id="backBtn">← Back</button>
+  <button class="back-btn" id="backBtn">← BACK</button>
 </nav>
 
 <!-- ══ PAGE 1 ══ -->
 <div class="page active" id="page1">
 
+  <!-- Grok logo background -->
+  <svg class="grok-bg" viewBox="0 0 2000 1920" fill="white" xmlns="http://www.w3.org/2000/svg">
+    <path d="M1997.505,5.546c-1.276,1.84-2.543,3.686-3.831,5.517c-44.395,63.091-89.508,125.693-132.964,189.424c-35.057,51.414-65.323,105.683-89.053,163.428c-34.447,83.828-47.232,171.046-42.05,261.249c3.355,58.404,12.861,115.859,25.887,172.786c16.297,71.216,24.256,143.247,20.188,216.29c-10.123,181.765-76.927,339.812-201.209,472.789c-107.86,115.406-239.56,189.915-394.446,221.624c-157.969,32.34-310.586,13.132-457.667-52.146c-43.51-19.311-84.795-42.677-124.218-69.344c-1.094-0.74-2.147-1.54-3.745-2.692c1.543-0.883,2.689-1.656,3.927-2.231c72.526-33.658,145.071-67.276,217.555-101.023c3.285-1.53,5.91-1.054,8.984,0.124c74.663,28.608,151.849,42.899,231.896,39.624c123.328-5.045,232.105-47.967,325.71-128.201c99.013-84.869,160.993-191.673,184.036-320.194c18.823-104.981,7.281-207.124-32.8-305.964c-13.942-34.381-52.565-47.733-86.226-30.057c-4.108,2.157-7.994,4.818-11.734,7.582c-216.828,160.265-433.63,320.565-650.436,480.86c-1.834,1.356-3.69,2.684-5.536,4.025c-0.344-0.374-0.689-0.747-1.033-1.121C1184.605,820.085,1590.468,412.274,1996.331,4.463C1996.722,4.824,1997.114,5.185,1997.505,5.546z"/>
+    <path d="M635.931,1353.173C425.433,1541.452,215.15,1729.537,4.867,1917.623c-0.275-0.19-0.551-0.38-0.826-0.57c1.039-1.478,2.041-2.984,3.123-4.431c29.898-39.969,63.26-76.964,97.26-113.421c40.804-43.752,82.042-87.114,122.109-131.532c35.108-38.921,66.724-80.614,91.953-126.809c19.879-36.398,34.424-74.673,40.535-115.893c7.782-52.496,1.059-103.422-17.762-152.706c-13.437-35.185-26.864-70.312-36.291-106.847c-21.394-82.908-28.324-166.979-21.201-252.304c19.974-239.28,151.763-453.739,355.913-578.35c90.292-55.114,188.023-89.471,292.95-102.908c130.165-16.669,256.024-0.09,377.981,48.558c52.942,21.118,102.709,47.566,149.092,80.552c1.22,0.868,2.42,1.767,3.601,2.688c0.244,0.19,0.36,0.544,0.758,1.179c-1.649,0.801-3.241,1.608-4.86,2.357c-71.815,33.205-143.623,66.428-215.499,99.5c-2.256,1.038-5.598,1.456-7.816,0.587c-152.615-59.802-303.123-52.584-449.63,18.494c-142.377,69.074-234.294,183.195-283.161,332.63c-22.431,68.594-30.403,139.234-23.761,211.172c11.547,125.044,63.341,231.057,152.534,319.089c1.067,1.053,2.142,2.099,3.193,3.168C635.287,1352.055,635.421,1352.372,635.931,1353.173z"/>
+  </svg>
+
   <!-- Stars -->
   <div class="stars-layer" id="stars"></div>
 
-  <!-- Sakura -->
+  <!-- Sakura — very subtle -->
   <div class="sakura-layer" id="sakura"></div>
 
-  <!-- Speed lines -->
-  <div class="speed-lines" id="speedLines"></div>
-
-  <!-- Moon -->
-  <div class="moon"></div>
-
-  <!-- Big decorative kanji -->
-  <div class="deco-kanji" style="top:-20px;left:-40px;transform:rotate(-15deg);">想</div>
-  <div class="deco-kanji" style="bottom:-40px;right:-20px;transform:rotate(10deg);color:rgba(155,48,255,0.05);">像</div>
-
-  <!-- Kanji floaters -->
-  <div class="kanji-layer" id="kanjiLayer"></div>
-
-  <!-- Torii SVG -->
-  <svg class="torii" viewBox="0 0 900 300" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect x="60" y="60" width="780" height="18" fill="white"/>
-    <rect x="80" y="90" width="740" height="12" fill="white"/>
-    <rect x="100" y="102" width="20" height="198" fill="white"/>
-    <rect x="780" y="102" width="20" height="198" fill="white"/>
-    <rect x="140" y="102" width="16" height="160" fill="white"/>
-    <rect x="744" y="102" width="16" height="160" fill="white"/>
-  </svg>
+  <!-- Subtle horizontal lines -->
+  <div class="hr-line" style="top:28%;width:60%;left:20%;animation-delay:0s;animation-duration:8s;"></div>
+  <div class="hr-line" style="top:68%;width:40%;left:30%;animation-delay:3s;animation-duration:10s;"></div>
 
   <!-- TOP NAV -->
   <div class="top-nav">
     <a href="#" class="top-nav-btn x-btn">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.911-5.622Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.911-5.622Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
       Community
     </a>
     <div class="top-nav-divider"></div>
-    <a href="#" class="top-nav-btn ca-btn">📋 CA: TBA</a>
+    <a href="#" class="top-nav-btn ca-btn">CA: TBA</a>
     <div class="top-nav-divider"></div>
-    <a href="#" class="top-nav-btn dex-btn">📈 Dexscreener</a>
+    <a href="#" class="top-nav-btn dex-btn">Dexscreener</a>
   </div>
 
   <!-- HERO -->
-  <div class="hero">
-    <img class="hero-char" src="https://i.imgur.com/muqhIzP.png" alt="IMAGINE character">
-    <div class="hero-text">
-      <div class="hero-tag">✦ AI Image Transformation</div>
-      <h1 class="logo-main">IMAGINE</h1>
-      <p class="logo-jp">イマジン · 想像 · アニメ</p>
-      <p class="logo-sub">Transform any image into any style</p>
-      <div class="grok-badge">⚡ Powered by <span>GROK</span></div>
-      <div class="preview-collage">
-        <div class="style-pill pill-1" onclick="goToPage(2)"><span>🎌 Anime</span></div>
-        <div class="style-pill pill-2" onclick="goToPage(2)"><span>🎮 Pixel</span></div>
-        <div class="style-pill pill-3" onclick="goToPage(2)"><span>🍼 Baby</span></div>
-        <div class="style-pill pill-4" onclick="goToPage(2)"><span>💥 Comic</span></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">AI Image Transformation</div>
+    <h1 class="logo-main">IMAGINE</h1>
+    <span class="logo-jp">イマジン · 想像 · 変換</span>
+    <p class="logo-sub">Transform any image into any style.<br>Powered by AI. Built different.</p>
+    <div class="grok-badge">
+      <svg class="grok-logo-inline" viewBox="0 0 2000 1920" fill="currentColor">
+        <path d="M1997.505,5.546c-1.276,1.84-2.543,3.686-3.831,5.517c-44.395,63.091-89.508,125.693-132.964,189.424c-35.057,51.414-65.323,105.683-89.053,163.428c-34.447,83.828-47.232,171.046-42.05,261.249c3.355,58.404,12.861,115.859,25.887,172.786c16.297,71.216,24.256,143.247,20.188,216.29c-10.123,181.765-76.927,339.812-201.209,472.789c-107.86,115.406-239.56,189.915-394.446,221.624c-157.969,32.34-310.586,13.132-457.667-52.146c-43.51-19.311-84.795-42.677-124.218-69.344c-1.094-0.74-2.147-1.54-3.745-2.692c1.543-0.883,2.689-1.656,3.927-2.231c72.526-33.658,145.071-67.276,217.555-101.023c3.285-1.53,5.91-1.054,8.984,0.124c74.663,28.608,151.849,42.899,231.896,39.624c123.328-5.045,232.105-47.967,325.71-128.201c99.013-84.869,160.993-191.673,184.036-320.194c18.823-104.981,7.281-207.124-32.8-305.964c-13.942-34.381-52.565-47.733-86.226-30.057c-4.108,2.157-7.994,4.818-11.734,7.582c-216.828,160.265-433.63,320.565-650.436,480.86c-1.834,1.356-3.69,2.684-5.536,4.025c-0.344-0.374-0.689-0.747-1.033-1.121C1184.605,820.085,1590.468,412.274,1996.331,4.463C1996.722,4.824,1997.114,5.185,1997.505,5.546z"/>
+        <path d="M635.931,1353.173C425.433,1541.452,215.15,1729.537,4.867,1917.623c-0.275-0.19-0.551-0.38-0.826-0.57c1.039-1.478,2.041-2.984,3.123-4.431c29.898-39.969,63.26-76.964,97.26-113.421c40.804-43.752,82.042-87.114,122.109-131.532c35.108-38.921,66.724-80.614,91.953-126.809c19.879-36.398,34.424-74.673,40.535-115.893c7.782-52.496,1.059-103.422-17.762-152.706c-13.437-35.185-26.864-70.312-36.291-106.847c-21.394-82.908-28.324-166.979-21.201-252.304c19.974-239.28,151.763-453.739,355.913-578.35c90.292-55.114,188.023-89.471,292.95-102.908c130.165-16.669,256.024-0.09,377.981,48.558c52.942,21.118,102.709,47.566,149.092,80.552c1.22,0.868,2.42,1.767,3.601,2.688c0.244,0.19,0.36,0.544,0.758,1.179c-1.649,0.801-3.241,1.608-4.86,2.357c-71.815,33.205-143.623,66.428-215.499,99.5c-2.256,1.038-5.598,1.456-7.816,0.587c-152.615-59.802-303.123-52.584-449.63,18.494c-142.377,69.074-234.294,183.195-283.161,332.63c-22.431,68.594-30.403,139.234-23.761,211.172c11.547,125.044,63.341,231.057,152.534,319.089c1.067,1.053,2.142,2.099,3.193,3.168C635.287,1352.055,635.421,1352.372,635.931,1353.173z"/>
+      </svg>
+      Powered by GROK
+    </div>
+
+    <div class="style-pills">
+      <div class="style-pill" onclick="goToPage(2)">🎌 Anime</div>
+      <div class="style-pill" onclick="goToPage(2)">🎮 Pixel</div>
+      <div class="style-pill" onclick="goToPage(2)">🌿 Ghibli</div>
+      <div class="style-pill" onclick="goToPage(2)">🍼 Baby</div>
+      <div class="style-pill" onclick="goToPage(2)">💥 Comic</div>
+      <div class="style-pill" onclick="goToPage(2)">🕹️ Game</div>
+    </div>
+
+    <button class="cta-btn" onclick="goToPage(2)">START IMAGINING →</button>
+
+    <div class="stats-row">
+      <div class="stat-item">
+        <div class="stat-num">8</div>
+        <div class="stat-label">Styles</div>
       </div>
-      <button class="cta-btn" onclick="goToPage(2)">START IMAGINING →</button>
+      <div class="stat-item">
+        <div class="stat-num">AI</div>
+        <div class="stat-label">Powered</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">∞</div>
+        <div class="stat-label">Possibilities</div>
+      </div>
     </div>
   </div>
 </div>
@@ -420,20 +453,19 @@ canvas{display:none;}
 <!-- ══ PAGE 2 ══ -->
 <div class="page" id="page2">
   <div class="page2-header">
-    <span class="jp-sub">スタイルを選んでください</span>
-    <h2><span class="w1">CHOOSE YOUR </span><span class="w2">STYLE</span></h2>
-    <p>Pick a transformation — GROK will handle the rest</p>
+    <h2>CHOOSE YOUR <span>STYLE</span></h2>
+    <p>Select a transformation — AI handles the rest</p>
     <div class="page2-divider"></div>
   </div>
   <div class="style-grid">
-    <div class="style-card card-anime" data-style="anime"  onclick="selectStyle(this)"><div class="check">✓</div><span class="card-icon">🎌</span><div class="card-name">ANIME</div><span class="card-jp">アニメ</span><div class="card-desc">Cel-shaded anime art</div></div>
-    <div class="style-card card-pixel" data-style="pixel"  onclick="selectStyle(this)"><div class="check">✓</div><span class="card-icon">🎮</span><div class="card-name">PIXEL</div><span class="card-jp">ピクセル</span><div class="card-desc">Retro 8-bit pixel art</div></div>
-    <div class="style-card card-ghibli" data-style="ghibli" onclick="selectStyle(this)"><div class="check">✓</div><span class="card-icon">🌿</span><div class="card-name">GHIBLI</div><span class="card-jp">ジブリ</span><div class="card-desc">Miyazaki painterly style</div></div>
-    <div class="style-card card-baby"  data-style="baby"   onclick="selectStyle(this)"><div class="check">✓</div><span class="card-icon">🍼</span><div class="card-name">BABY</div><span class="card-jp">赤ちゃん</span><div class="card-desc">Chubby baby style</div></div>
-    <div class="style-card card-chibi" data-style="chibi"  onclick="selectStyle(this)"><div class="check">✓</div><span class="card-icon">✨</span><div class="card-name">CHIBI</div><span class="card-jp">ちび</span><div class="card-desc">Big-head anime chibi</div></div>
-    <div class="style-card card-comic" data-style="comic"  onclick="selectStyle(this)"><div class="check">✓</div><span class="card-icon">💥</span><div class="card-name">COMIC</div><span class="card-jp">コミック</span><div class="card-desc">Bold comic book art</div></div>
-    <div class="style-card card-dumb"  data-style="dumb"   onclick="selectStyle(this)"><div class="check">✓</div><span class="card-icon">🧠</span><div class="card-name">DUMB</div><span class="card-jp">バカ</span><div class="card-desc">Dumb it all the way down</div></div>
-    <div class="style-card card-game"  data-style="game"   onclick="selectStyle(this)"><div class="check">✓</div><span class="card-icon">🕹️</span><div class="card-name">GAME</div><span class="card-jp">ゲーム</span><div class="card-desc">Low-poly 3D game character</div></div>
+    <div class="style-card" data-style="anime"  onclick="selectStyle(this)"><div class="check">✓</div><span class="card-icon">🎌</span><div class="card-name">ANIME</div><span class="card-jp">アニメ</span><div class="card-desc">Cel-shaded anime art</div></div>
+    <div class="style-card" data-style="pixel"  onclick="selectStyle(this)"><div class="check">✓</div><span class="card-icon">🎮</span><div class="card-name">PIXEL</div><span class="card-jp">ピクセル</span><div class="card-desc">Retro 8-bit pixel art</div></div>
+    <div class="style-card" data-style="ghibli" onclick="selectStyle(this)"><div class="check">✓</div><span class="card-icon">🌿</span><div class="card-name">GHIBLI</div><span class="card-jp">ジブリ</span><div class="card-desc">Miyazaki painterly style</div></div>
+    <div class="style-card" data-style="baby"   onclick="selectStyle(this)"><div class="check">✓</div><span class="card-icon">🍼</span><div class="card-name">BABY</div><span class="card-jp">赤ちゃん</span><div class="card-desc">Chubby baby style</div></div>
+    <div class="style-card" data-style="chibi"  onclick="selectStyle(this)"><div class="check">✓</div><span class="card-icon">✨</span><div class="card-name">CHIBI</div><span class="card-jp">ちび</span><div class="card-desc">Big-head anime chibi</div></div>
+    <div class="style-card" data-style="comic"  onclick="selectStyle(this)"><div class="check">✓</div><span class="card-icon">💥</span><div class="card-name">COMIC</div><span class="card-jp">コミック</span><div class="card-desc">Bold comic book art</div></div>
+    <div class="style-card" data-style="dumb"   onclick="selectStyle(this)"><div class="check">✓</div><span class="card-icon">🧠</span><div class="card-name">DUMB</div><span class="card-jp">バカ</span><div class="card-desc">Dumb it all the way down</div></div>
+    <div class="style-card" data-style="game"   onclick="selectStyle(this)"><div class="check">✓</div><span class="card-icon">🕹️</span><div class="card-name">GAME</div><span class="card-jp">ゲーム</span><div class="card-desc">Low-poly 3D game character</div></div>
   </div>
   <button class="next-btn" id="nextBtn" onclick="goToPage(3)" disabled>UPLOAD IMAGE →</button>
 </div>
@@ -441,25 +473,24 @@ canvas{display:none;}
 <!-- ══ PAGE 3 ══ -->
 <div class="page" id="page3">
   <div class="page3-header">
-    <span class="jp-label">アップロード · 変換</span>
     <h2>UPLOAD & <span>TRANSFORM</span></h2>
   </div>
   <div class="badges-row">
-    <div class="selected-badge"><span id="badgeIcon">✨</span><span id="badgeText">Select a style</span></div>
-    <div class="powered-badge">⚡ GROK AI</div>
+    <div class="selected-badge"><span id="badgeIcon">✨</span>&nbsp;<span id="badgeText">Select a style</span></div>
+    <div class="powered-badge">GROK AI</div>
   </div>
   <div class="upload-zone" id="uploadZone">
     <input type="file" id="fileInput" accept="image/*">
-    <span class="upload-icon">🌸</span>
-    <p><strong>Drop your image here</strong></p>
-    <p>or click to browse</p>
+    <span class="upload-icon">↑</span>
+    <div class="upload-title">Drop your image here</div>
+    <div class="upload-sub">or click to browse — any format</div>
     <span class="upload-jp">画像をアップロード</span>
   </div>
   <div class="preview-area" id="previewArea">
     <div class="img-panels">
       <div class="img-panel">
         <img id="originalPreview" src="" alt="Original">
-        <div class="label">ORIGINAL · オリジナル</div>
+        <div class="label">ORIGINAL</div>
       </div>
       <div class="img-panel result-panel">
         <img id="resultPreview" src="" alt="Result" style="display:none">
@@ -467,110 +498,83 @@ canvas{display:none;}
           <div class="spinner"></div>
           <div class="load-title" id="loadTitle">IMAGINING...</div>
           <div class="load-sub" id="loadSub">GROK is working its magic</div>
-          <div class="load-jp">処理中...</div>
         </div>
         <div class="result-placeholder" id="resultPlaceholder">
-          <span>🌸</span><span>Result here · 結果</span>
+          <span>◯</span><span>RESULT</span>
         </div>
-        <div class="label" id="resultLabel" style="display:none">RESULT · 結果</div>
+        <div class="label" id="resultLabel" style="display:none">RESULT</div>
       </div>
     </div>
-    <button class="transform-btn" id="transformBtn" onclick="transformImage()">&#10024; IMAGINE IT</button>
+    <button class="transform-btn" id="transformBtn" onclick="transformImage()">IMAGINE IT →</button>
     <p class="error-msg" id="errorMsg"></p>
-    <button class="download-btn" id="downloadBtn" onclick="downloadResult()">&#11015; Download Result · ダウンロード</button>
+    <button class="download-btn" id="downloadBtn" onclick="downloadResult()">↓ DOWNLOAD RESULT</button>
   </div>
 </div>
 
 <script>
-// ── STARS ──
-const starsEl = document.getElementById('stars');
-for (let i = 0; i < 100; i++) {
-  const s = document.createElement('div'); s.className = 'star-dot';
-  const sz = Math.random()*2.5+0.5;
-  s.style.cssText=`width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;animation-delay:${Math.random()*6}s;animation-duration:${2+Math.random()*4}s;`;
+// Stars
+const starsEl=document.getElementById('stars');
+for(let i=0;i<80;i++){
+  const s=document.createElement('div');s.className='star-dot';
+  const sz=Math.random()*1.8+0.4;
+  s.style.cssText=`width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;animation-delay:${Math.random()*6}s;animation-duration:${3+Math.random()*5}s;`;
   starsEl.appendChild(s);
 }
 
-// ── SAKURA ──
-const sakuraEl = document.getElementById('sakura');
-const petals = ['🌸','🌺','✿','❀','🌸'];
-for (let i = 0; i < 18; i++) {
-  const p = document.createElement('div'); p.className='petal';
-  p.textContent = petals[Math.floor(Math.random()*petals.length)];
-  const dur = 8+Math.random()*12;
-  const delay = Math.random()*15;
-  p.style.cssText=`left:${Math.random()*100}%;font-size:${12+Math.random()*14}px;animation-duration:${dur}s;animation-delay:${delay}s;`;
+// Sakura — very minimal
+const sakuraEl=document.getElementById('sakura');
+for(let i=0;i<8;i++){
+  const p=document.createElement('div');p.className='petal';
+  p.textContent='🌸';
+  const dur=12+Math.random()*16;
+  p.style.cssText=`left:${Math.random()*100}%;font-size:${10+Math.random()*8}px;animation-duration:${dur}s;animation-delay:${Math.random()*20}s;opacity:0.15;`;
   sakuraEl.appendChild(p);
 }
 
-// ── SPEED LINES ──
-const slEl = document.getElementById('speedLines');
-for (let i = 0; i < 8; i++) {
-  const l = document.createElement('div'); l.className='speed-line';
-  const w = 100+Math.random()*200;
-  l.style.cssText=`left:${Math.random()*80}%;top:${Math.random()*100}%;width:${w}px;animation-delay:${Math.random()*4}s;animation-duration:${2+Math.random()*3}s;opacity:0;`;
-  slEl.appendChild(l);
-}
+// Config
+const GEMINI_URL='/api/transform';
+let currentPage=1,selectedStyle=null,uploadedDataURL=null,resultDataURL=null;
 
-// ── KANJI FLOATERS ──
-const kanjiEl = document.getElementById('kanjiLayer');
-const kanjiChars = ['夢','力','愛','光','星','空','海','火','風','雷','想','像','魔','神','龍'];
-for (let i = 0; i < 12; i++) {
-  const k = document.createElement('div'); k.className='kanji-char';
-  k.textContent = kanjiChars[Math.floor(Math.random()*kanjiChars.length)];
-  const sz = 16+Math.random()*28;
-  const dur = 6+Math.random()*10;
-  const delay = Math.random()*12;
-  k.style.cssText=`font-size:${sz}px;left:${Math.random()*95}%;top:${20+Math.random()*70}%;animation-duration:${dur}s;animation-delay:${delay}s;`;
-  kanjiEl.appendChild(k);
-}
-
-// ── STATE ──
-const GEMINI_URL = '/api/transform';
-let currentPage=1, selectedStyle=null, uploadedDataURL=null, resultDataURL=null;
-
-const stylesMeta = {
-  anime:  { icon:'🎌', label:'ANIME',  loadTitle:'ANIMATING...',    loadSub:'Drawing the outlines...',   prompt:'COMPLETELY redraw this image as dramatic high-quality anime art. Apply very thick bold black ink outlines around everything, strong cel-shading with hard flat colour fills and dramatic dark shadows, dynamic lighting with strong highlights, large expressive anime eyes, and the dramatic visual style of a high-budget action anime series. Make the colours extremely vibrant and saturated. Every element should look fully hand-drawn in anime style.' },
-  pixel:  { icon:'🎮', label:'PIXEL',  loadTitle:'PIXELATING...',   loadSub:'Crunching into 8-bit...',   prompt:'Convert this image into pixel art using a very low resolution (32x32 or 64x64 grid). Each pixel should be clearly visible and blocky, with hard edges (no smoothing). Use nearest-neighbor scaling. Simplify details heavily, with large pixel blocks, flat colors, and thick outlines. Chibi proportions, minimal shading, retro game avatar style.' },
-  ghibli: { icon:'🌿', label:'GHIBLI', loadTitle:'GHIBLI-FYING...', loadSub:'Summoning forest spirits...', prompt:'COMPLETELY and DRAMATICALLY repaint this entire image in full Studio Ghibli animation style. Fully repaint everything with lush hand-drawn watercolour textures, extremely warm glowing golden-hour lighting, beautifully rounded soft character designs, incredibly detailed painterly natural environments. Make it look exactly like a frame from a Miyazaki film.' },
-  baby:   { icon:'🍼', label:'BABY',   loadTitle:'BABIFYING...',    loadSub:'Adding chubby cheeks...',   prompt:'EXTREMELY and DRAMATICALLY transform everything into the most exaggerated baby version imaginable. Give every subject a gigantic oversized round head that is at least 70% of the body size, massively chubby balloon cheeks, a tiny stubby little body, enormous sparkly innocent eyes taking up half the face, and bright rosy cheeks. Wildly exaggerated baby proportions.' },
-  chibi:  { icon:'✨', label:'CHIBI',  loadTitle:'CHIBI-FYING...',  loadSub:'Enlarging the head ratio...', prompt:'EXTREMELY transform this image into the most exaggerated chibi anime style possible. Enormous head at least 4x the size of the tiny stubby body, massive sparkling anime eyes taking up 40% of the face, bright neon-saturated colours, maximum chibi proportions. Nothing subtle — go full chibi.' },
-  comic:  { icon:'💥', label:'COMIC',  loadTitle:'COMICIFYING...',  loadSub:'Inking the panels...',      prompt:'COMPLETELY transform into the most dramatic bold comic book art. Extremely thick heavy black ink outlines, aggressive Ben-Day halftone dot patterns, flat bright primary colours, extremely dramatic hard shadows, and the bold graphic style of classic American superhero comics. Make it look printed in a 1960s Marvel comic.' },
-  dumb:   { icon:'🧠', label:'DUMB',   loadTitle:'DUMBIFYING...',   loadSub:'Lowering the IQ...',        prompt:'COMPLETELY transform into the most absurd dumb meme style. Googly eyes on every face, derpy cross-eyed expressions, MS Paint style scribbles, garish clashing colours, silly accessories, distorted goofy faces. The dumber and more absurd the better.' },
-  game:   { icon:'🕹️', label:'GAME',   loadTitle:'GAME-IFYING...',  loadSub:'Rendering polygons...',     prompt:'Transform into low-poly 3D game character style like an early PS2/PS3 era video game. Flat-shaded geometric triangular polygons, no texture smoothing, each face a solid flat colour with hard angular edges, geometric spiky hair, blocky angular clothing. Exact aesthetic of low-poly flat shading early 3D games. No smooth curves, everything hard flat polygons.' },
+const stylesMeta={
+  anime:  {icon:'🎌',label:'ANIME', loadTitle:'ANIMATING...',   loadSub:'Drawing outlines...',       prompt:'COMPLETELY redraw this image as dramatic high-quality anime art. Apply very thick bold black ink outlines around everything, strong cel-shading with hard flat colour fills and dramatic dark shadows, dynamic lighting with strong highlights, large expressive anime eyes, and the dramatic visual style of a high-budget action anime series. Make the colours extremely vibrant and saturated. Every element should look fully hand-drawn in anime style.'},
+  pixel:  {icon:'🎮',label:'PIXEL', loadTitle:'PIXELATING...',  loadSub:'Crunching into 8-bit...',   prompt:'Convert this image into pixel art using a very low resolution (32x32 or 64x64 grid). Each pixel should be clearly visible and blocky, with hard edges (no smoothing). Use nearest-neighbor scaling. Simplify details heavily, with large pixel blocks, flat colors, and thick outlines. Chibi proportions, minimal shading, retro game avatar style.'},
+  ghibli: {icon:'🌿',label:'GHIBLI',loadTitle:'GHIBLI-FYING...',loadSub:'Summoning forest spirits...',prompt:'COMPLETELY and DRAMATICALLY repaint this entire image in full Studio Ghibli animation style. Fully repaint everything with lush hand-drawn watercolour textures, extremely warm glowing golden-hour lighting, beautifully rounded soft character designs, incredibly detailed painterly natural environments. Make it look exactly like a frame from a Miyazaki film.'},
+  baby:   {icon:'🍼',label:'BABY',  loadTitle:'BABIFYING...',   loadSub:'Adding chubby cheeks...',   prompt:'EXTREMELY transform everything into the most exaggerated baby version imaginable. Gigantic oversized round head at least 70% of body size, massively chubby balloon cheeks, tiny stubby body, enormous sparkly innocent eyes, bright rosy cheeks. Wildly exaggerated baby proportions.'},
+  chibi:  {icon:'✨',label:'CHIBI', loadTitle:'CHIBI-FYING...',  loadSub:'Enlarging head ratio...',   prompt:'EXTREMELY transform into the most exaggerated chibi anime style. Enormous head 4x the size of tiny stubby body, massive sparkling anime eyes taking up 40% of face, bright neon-saturated colours. Maximum chibi proportions. Nothing subtle.'},
+  comic:  {icon:'💥',label:'COMIC', loadTitle:'COMICIFYING...',  loadSub:'Inking the panels...',      prompt:'COMPLETELY transform into dramatic bold comic book art. Extremely thick heavy black ink outlines, aggressive Ben-Day halftone dot patterns, flat bright primary colours, extremely dramatic hard shadows. Make it look printed in a 1960s Marvel comic.'},
+  dumb:   {icon:'🧠',label:'DUMB',  loadTitle:'DUMBIFYING...',  loadSub:'Lowering the IQ...',        prompt:'COMPLETELY transform into the most absurd dumb meme style. Googly eyes on every face, derpy cross-eyed expressions, MS Paint scribbles, garish clashing colours, silly accessories, distorted goofy faces. The dumber and more absurd the better.'},
+  game:   {icon:'🕹️',label:'GAME',  loadTitle:'GAME-IFYING...',  loadSub:'Rendering polygons...',    prompt:'Transform into low-poly 3D game character style like an early PS2/PS3 era video game. Flat-shaded geometric triangular polygons, no texture smoothing, each face a solid flat colour with hard angular edges, geometric spiky hair, blocky angular clothing. No smooth curves, everything hard flat polygons.'},
 };
 
-// ── NAV ──
-function goToPage(n) {
+function goToPage(n){
   document.getElementById('page'+currentPage).classList.remove('active');
   document.getElementById('page'+n).classList.add('active');
   currentPage=n;
-  document.getElementById('backNav').classList.toggle('visible', n>1);
-  if (n===3 && selectedStyle) {
+  document.getElementById('backNav').classList.toggle('visible',n>1);
+  if(n===3&&selectedStyle){
     const m=stylesMeta[selectedStyle];
     document.getElementById('badgeIcon').textContent=m.icon;
     document.getElementById('badgeText').textContent=m.label+' selected';
   }
   window.scrollTo(0,0);
 }
-document.getElementById('backBtn').addEventListener('click', ()=>{ if(currentPage>1) goToPage(currentPage-1); });
+document.getElementById('backBtn').addEventListener('click',()=>{if(currentPage>1)goToPage(currentPage-1);});
 
-function selectStyle(card) {
+function selectStyle(card){
   document.querySelectorAll('.style-card').forEach(c=>c.classList.remove('selected'));
   card.classList.add('selected');
   selectedStyle=card.dataset.style;
   document.getElementById('nextBtn').disabled=false;
 }
 
-// ── UPLOAD ──
 const uploadZone=document.getElementById('uploadZone');
 const fileInput=document.getElementById('fileInput');
-uploadZone.addEventListener('dragover', e=>{e.preventDefault();uploadZone.classList.add('dragover');});
-uploadZone.addEventListener('dragleave', ()=>uploadZone.classList.remove('dragover'));
-uploadZone.addEventListener('drop', e=>{e.preventDefault();uploadZone.classList.remove('dragover');const f=e.dataTransfer.files[0];if(f&&f.type.startsWith('image/'))handleFile(f);});
-fileInput.addEventListener('change', ()=>{if(fileInput.files[0])handleFile(fileInput.files[0]);});
+uploadZone.addEventListener('dragover',e=>{e.preventDefault();uploadZone.classList.add('dragover');});
+uploadZone.addEventListener('dragleave',()=>uploadZone.classList.remove('dragover'));
+uploadZone.addEventListener('drop',e=>{e.preventDefault();uploadZone.classList.remove('dragover');const f=e.dataTransfer.files[0];if(f&&f.type.startsWith('image/'))handleFile(f);});
+fileInput.addEventListener('change',()=>{if(fileInput.files[0])handleFile(fileInput.files[0]);});
 
-function handleFile(file) {
+function handleFile(file){
   const reader=new FileReader();
   reader.onload=e=>{
     uploadedDataURL=e.target.result;
@@ -581,7 +585,7 @@ function handleFile(file) {
   reader.readAsDataURL(file);
 }
 
-function resetResult() {
+function resetResult(){
   document.getElementById('resultPreview').style.display='none';
   document.getElementById('resultPreview').src='';
   document.getElementById('resultPlaceholder').style.display='flex';
@@ -592,13 +596,12 @@ function resetResult() {
   resultDataURL=null;
 }
 
-// ── RESIZE ──
-function resizeImage(dataURL, maxPx) {
+function resizeImage(dataURL,maxPx){
   return new Promise(resolve=>{
     const img=new Image();
     img.onload=()=>{
       const canvas=document.getElementById('workCanvas');
-      let w=img.width, h=img.height;
+      let w=img.width,h=img.height;
       if(w>maxPx||h>maxPx){const r=Math.min(maxPx/w,maxPx/h);w=Math.round(w*r);h=Math.round(h*r);}
       canvas.width=w;canvas.height=h;
       canvas.getContext('2d').drawImage(img,0,0,w,h);
@@ -608,9 +611,8 @@ function resizeImage(dataURL, maxPx) {
   });
 }
 
-// ── TRANSFORM ──
-async function transformImage() {
-  if(!uploadedDataURL||!selectedStyle) return;
+async function transformImage(){
+  if(!uploadedDataURL||!selectedStyle)return;
   const btn=document.getElementById('transformBtn');
   const overlay=document.getElementById('loadingOverlay');
   const errMsg=document.getElementById('errorMsg');
@@ -623,13 +625,13 @@ async function transformImage() {
   document.getElementById('loadTitle').textContent=meta.loadTitle;
   document.getElementById('loadSub').textContent=meta.loadSub;
 
-  const msgs=['Talking to GROK...','Applying the style...','Almost done...','Rendering magic...','Adding final touches...'];
+  const msgs=['Processing image...','Applying transformation...','Almost ready...','Adding final touches...'];
   let mi=0;
   const msgTimer=setInterval(()=>{document.getElementById('loadSub').textContent=msgs[mi++%msgs.length];},3000);
 
-  try {
+  try{
     const resized=await resizeImage(uploadedDataURL,1024);
-    const [hdr,b64]=resized.split(',');
+    const[hdr,b64]=resized.split(',');
     const mime=hdr.match(/:(.*?);/)[1];
 
     const payload={
@@ -646,10 +648,10 @@ async function transformImage() {
     if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e?.error?.message||`API error ${res.status}`);}
 
     const data=await res.json();
-    if(data.error) throw new Error(data.error);
+    if(data.error)throw new Error(data.error);
     const imgB64=data.imageData;
     const imgMime=data.mimeType||'image/png';
-    if(!imgB64) throw new Error('No image returned. Try a different style or clearer photo.');
+    if(!imgB64)throw new Error('No image returned. Try a different style or clearer photo.');
 
     resultDataURL=`data:${imgMime};base64,${imgB64}`;
     document.getElementById('resultPreview').src=resultDataURL;
@@ -658,7 +660,7 @@ async function transformImage() {
     overlay.classList.add('hidden');
     document.getElementById('downloadBtn').classList.add('visible');
 
-  } catch(err) {
+  }catch(err){
     clearInterval(msgTimer);
     overlay.classList.add('hidden');
     document.getElementById('resultPlaceholder').style.display='flex';
@@ -669,9 +671,8 @@ async function transformImage() {
   btn.disabled=false;
 }
 
-// ── DOWNLOAD ──
-function downloadResult() {
-  if(!resultDataURL) return;
+function downloadResult(){
+  if(!resultDataURL)return;
   const a=document.createElement('a');
   a.href=resultDataURL;
   a.download=`imagine-${selectedStyle}-${Date.now()}.png`;
